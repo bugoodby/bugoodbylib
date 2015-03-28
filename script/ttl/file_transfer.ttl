@@ -1,0 +1,21 @@
+;-------------------------------------
+; setup.shの転送
+;-------------------------------------
+fname='setup.sh'
+fileopen fhandle fname 0
+sendln "rm ./" fname
+while 1
+	filereadln fhandle line
+	if result=1 then
+		break
+	endif
+	strreplace line 1 '\t+' '  '
+	sendln "echo '" line "' >> " fname
+endwhile
+fileclose fhandle
+
+;-------------------------------------
+; アクセス権の変更
+;-------------------------------------
+sendln "chmod +x ./*.sh"
+sendln "ls -l"

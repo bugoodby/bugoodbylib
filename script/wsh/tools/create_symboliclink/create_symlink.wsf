@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="Shift_JIS" standalone="yes" ?>
+<job id="main">
+<?job error="True" debug="True" ?>
+<script language="VBScript">
+<![CDATA[
+Function VBInputBox( msg, title, default )
+	VBInputBox = InputBox(msg, title, default)
+End Function
+]]>
+</script>
+<script language="JScript">
+<![CDATA[
+var wshShell = new ActiveXObject("WScript.Shell");
+var fso = new ActiveXObject("Scripting.FileSystemObject");
+
+//========================================
+// シンボリックリンクの対象ファイル指定
+//========================================
+var target = "C:\\Windows\\WindowsUpdate.log";
+
+
+//UAC昇格
+(function(){
+	var key = "_!!!_uac_mode_!!!_";
+	
+	var sVer = fso.GetFileVersion(fso.BuildPath(fso.GetSpecialfolder(1).Path, "kernel32.dll"));
+	var nVer = parseInt(sVer);
+	if ( nVer >= 6 ) {
+		var args = (function(){
+			args = [];
+			for ( var e = new Enumerator(WScript.Arguments); !e.atEnd(); e.moveNext() ) { args.push(e.item()); }
+			return args;
+		})();
+		if ( args[args.length - 1] != key ) {
+			args.push(key);
+			var sh = new ActiveXObject("Shell.Application");
+			sh.ShellExecute("wscript.exe", "\"" + WScript.ScriptFullName + "\" "+ args.join(" "), "", "runas", 1);
+			WScript.Quit(0);
+		}
+	}
+})();
+
+var str = VBInputBox("リンク先フォルダを入力してください。", "リンク先の入力", "");
+if ( str != null ) {
+	var link = fso.BuildPath(str, fso.GetFileName(target));
+	var btn = wshShell.Popup("Target:\n" + target + "\n↓\nLink:\n" + link, 0, "Confirmation", 1);
+	if ( btn == 1 ) {
+		var cmd = "cmd /k mklink \"" + link + "\" \"" + target + "\"";
+		//WScript.Echo(cmd);
+		wshShell.Run(cmd);
+	}
+}
+]]>
+</script>
+</job>

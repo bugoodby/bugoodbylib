@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="Shift_JIS" standalone="yes" ?>
+<job id="main">
+<?job error="True" debug="True" ?>
+<script language="VBScript">
+<![CDATA[
+Function VBInputBox( msg, title, default )
+	VBInputBox = InputBox(msg, title, default)
+End Function
+]]>
+</script>
+<script language="JScript">
+<![CDATA[
+var fso = new ActiveXObject("Scripting.FileSystemObject");
+
+main();
+
+function main()
+{
+	try {
+		var str = VBInputBox("置換後の値を入力", "InputBox", "123abc");
+		if ( str != null ) {
+			copy_and_rename(str);
+		}
+	}
+	catch ( e ) {
+		WScript.Echo(e.description);
+	}
+}
+
+function copy_and_rename( str )
+{
+	
+	var templateDir = WScript.ScriptFullName.replace(WScript.ScriptName, "CopyAndRenameFilesOrg");
+	if ( !fso.FolderExists(templateDir) ) {
+		WScript.Echo("[ERROR] not found " + templateDir);
+		return;
+	}
+	
+	var targetDir = WScript.ScriptFullName.replace(WScript.ScriptName, str);
+//	WScript.Echo(templateDir + " -> " + targetDir);
+	fso.CopyFolder(templateDir, targetDir);
+	WScript.Sleep(500);
+	
+	rename_files(str, targetDir);
+	
+	return;
+}
+
+function rename_files( str_after, folderspec )
+{
+	var keyword = "【置換】";
+	var d = fso.GetFolder(folderspec);
+	var subdirs = new Enumerator(d.SubFolders);
+	var files = new Enumerator(d.files);
+	
+	for ( ; !files.atEnd(); files.moveNext() ) {
+		if ( files.item().Name.indexOf(keyword) != -1 ) {
+			str = files.item().Name.replace(keyword, str_after);
+			files.item().Name = str;
+		}
+	}
+	for ( ; !subdirs.atEnd(); subdirs.moveNext() ) {
+		rename_files(str, subdirs.item().Path);
+	}
+	return;
+}
+
+]]>
+</script>
+</job>

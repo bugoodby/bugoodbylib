@@ -1,0 +1,42 @@
+LockHardEX(0, LOCK_MOUSE)  // マウス禁止
+
+
+url = "http://mirrors.axint.net/apache/"
+IFB PARAM_STR[0] <> "" THEN
+	url = PARAM_STR[0]
+ENDIF
+
+// IE起動
+IE = CREATEOLEOBJ("InternetExplorer.Application")
+IE.visible = True
+IE.navigate(url)
+
+// ページ表示完了まで待機
+SLEEP(3)
+
+// IEにCtl+S送信
+id = GETID(" - Internet Explorer", "IEFrame", -1)
+SLEEP(1)
+CTRLWIN(id, ACTIVATE)
+SCKEY(id, VK_CTRL, VK_S)
+
+// ファイル保存
+id = GETID("Web ページの保存", "#32770", -1)
+SLEEP(1)
+SENDSTR(id, "D:\mydoc\Documents\test.txt", 2, True)
+CLKITEM(id, "テキスト ファイル (*.txt)", CLK_LIST, True, 2)
+CLKITEM(id, "保存(S)", CLK_BTN)
+id = GETID("名前を付けて保存の確認", "#32770", 2)
+IF id <> -1 THEN
+	CLKITEM(id, "はい(Y)", CLK_BTN)
+ENDIF
+
+// IEにCtl+S送信
+id = GETID(" - Internet Explorer", "IEFrame", -1)
+SLEEP(1)
+CTRLWIN(id, ACTIVATE)
+SCKEY(id, VK_ALT, VK_F4)
+
+
+SLEEP(1)
+

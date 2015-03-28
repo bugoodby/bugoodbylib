@@ -1,0 +1,37 @@
+
+test1val=''
+test2val=''
+
+;--------------------------
+; load settings
+;--------------------------
+inifile = 'test.ini'
+filesearch inifile
+if result=0 then
+	messagebox 'ini file not found.' 'ERROR'
+else
+	fileopen fhandle 'test.ini' 0
+	while 1
+		filereadln fhandle line
+		if result=1 break
+		strsplit line '=' 2
+		key=groupmatchstr1
+		strtrim key ' \t'
+		val=groupmatchstr2
+		strtrim val ' \t'
+		strcompare key 'TEST1'
+		if result=0 test1val = val
+		strcompare key 'TEST2'
+		if result=0 test2val = val
+	endwhile
+	fileclose fhandle
+endif
+;--------------------------
+
+msg=''
+sprintf2 msg 'test1: %s' test1val
+messagebox msg 'title'
+sprintf2 msg 'test2: %s' test2val
+messagebox msg 'title'
+
+

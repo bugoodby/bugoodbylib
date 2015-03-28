@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="Shift_JIS" standalone="yes" ?>
+<job id="main">
+<?job error="True" debug="True" ?>
+<script language="VBScript">
+<![CDATA[
+Function VBInputBox( msg, title, default )
+	VBInputBox = InputBox(msg, title, default)
+End Function
+]]>
+</script>
+<script language="JScript">
+<![CDATA[
+//------------------------------------------------
+//
+// [LPRコマンドの書式]
+// lpr -S サーバ名 -P プリンタ名 印刷ファイル名
+//
+// ex) lpr -S 192.168.xx.xx -P lp sample.prn
+//
+//------------------------------------------------
+(function() {
+var fso = new ActiveXObject("Scripting.FileSystemObject");
+var wshShell = new ActiveXObject("WScript.Shell");
+var tmp_dir = WScript.ScriptFullName.replace(WScript.ScriptName, "");
+var his_file = tmp_dir + "lprscript_history.txt";
+
+main( WScript.Arguments.Count(), WScript.Arguments );
+function main( argc, argv ) 
+{
+	if ( argc == 0 ) {
+		WScript.Echo("usage: lprscript file[...]");
+		return 0;
+	}
+	var ip = ReadHistory();
+	var str = VBInputBox("Please input target IP address.", "lprscript", ip);
+	if ( str != null ) {
+		if ( str.match(/^\d+\.\d+\.\d+\.\d+$/) ) {
+			WriteHistory(str);
+			for ( var i = 0; i < argc; i++ ) {
+				var bin = argv(i);
+				var cmd = "cmd /c lpr -S " + str + " -P lp \"" + bin + "\"";
+				var oExec = wshShell.Exec(cmd);
+				while ( oExec.Status == 0 ) {
+					WScript.Sleep(100);
+				}
+				var msg = oExec.StdOut.ReadAll();
+				if ( msg.length > 0 ) {
+					WScript.Echo(cmd + "\r\n\r\n" + msg);
+				}
+			}
+		} else {
+			WScript.Echo("!!!NOT IP address!!! : " + str);
+		}
+	}
+	return 0;
+}
+
+function ReadHistory()
+{
+	if ( fso.FileExists(his_file) ) {
+		var rs = fso.OpenTextFile( his_file, 1/*ForReading*/, false, -2/*default*/ );
+		var str = rs.ReadLine();
+		rs.Close();
+		return str;
+	}
+	return "";
+}
+
+function WriteHistory( str )
+{
+	var ws = fso.OpenTextFile( his_file, 2/*ForWriting*/, true, -2/*default*/ );
+	ws.WriteLine(str);
+	ws.Close();
+	return 0;
+}
+})();
+]]>
+</script>
+</job>

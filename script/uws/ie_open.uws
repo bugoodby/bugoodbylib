@@ -1,0 +1,24 @@
+
+url = "http://mirrors.axint.net/apache/"
+IFB PARAM_STR[0] <> "" THEN
+	url = PARAM_STR[0]
+ENDIF
+
+// IE起動
+IE = CREATEOLEOBJ("InternetExplorer.Application")
+IE.visible = True
+IE.navigate(url)
+
+// ページ表示完了まで待機
+REPEAT
+	SLEEP(0.2)
+UNTIL ( !IE.busy ) AND ( IE.readyState = 4 )
+
+// <BODY>取得
+body = IEGetSrc(IE, "BODY")
+
+fp = FOPEN("pagebody.txt", F_WRITE)
+FPUT(fp, body)
+FCLOSE(fp)
+
+IE.QUIT

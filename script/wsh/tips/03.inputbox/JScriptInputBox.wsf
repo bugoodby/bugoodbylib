@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="Shift_JIS" standalone="yes" ?>
+<job id="main">
+<?job error="True" debug="True" ?>
+<script language="VBScript">
+<![CDATA[
+Function VBInputBox( msg, title, default )
+	VBInputBox = InputBox(msg, title, default)
+End Function
+]]>
+</script>
+<script language="JScript">
+<![CDATA[
+var str = VBInputBox("JScriptからInputBoxを呼び出します", "InputBox", "123abc");
+if ( str == null ) {
+	WScript.Echo("キャンセルされました。");
+} else if ( str.length > 0 ) {
+	WScript.Echo(str + "\nを入力しました。");
+} else {
+	WScript.Echo("何も入力されませんでした。");
+}
+]]>
+</script>
+</job>

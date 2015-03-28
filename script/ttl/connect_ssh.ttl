@@ -1,0 +1,13 @@
+
+myuser='user'
+mypass='pass'
+
+;---------------------------------------
+; login
+;---------------------------------------
+strconcat msg '192.168.142.128:22 /ssh /2 /auth=password /user='
+strconcat msg myuser
+strconcat msg ' /passwd='
+strconcat msg mypass
+connect msg
+

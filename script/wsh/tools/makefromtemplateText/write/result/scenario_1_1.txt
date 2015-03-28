@@ -1,0 +1,63 @@
+# This is a test file.
+# hogehoge
+# piyopiyo
+# fugafuga
+1 TEST >> FirstItem
+struct tagITEM1 {
+  int geamle = 111;
+  char *gegmak = "femgkesaewefawn";
+};
+struct tagITEM2 {
+  int i = 0;
+  bool b = true;
+  char c = 'a';
+};
+struct tagITEM3 {
+  bool a1 = true;
+  bool a2 = true;
+  bool a3 = true;
+  bool a4 = true;
+  bool a5 = true;
+  bool a6 = true;
+  bool a7 = true;
+};
+
+2 TEST >> SecondItem
+struct tagITEM1 {
+  int geamle = 111;
+  char *gegmak = "femgkesaewefawn";
+};
+struct tagITEM2 {
+  int i = 0;
+  bool b = true;
+  char c = afweamkge;
+};
+struct tagITEM3 {
+  bool a1 = true;
+  bool a2 = true;
+  bool a3 = true;
+  bool a4 = true;
+  bool a5 = true;
+  bool a6 = true;
+  bool a7 = true;
+};
+
+100 TEST >> LastItem
+struct tagITEM1 {
+  int geamle = 111;
+  char *gegmak = "femgkesaewefawn";
+};
+struct tagITEM2 {
+  int i = 0;
+  bool b = true;
+  char c = 'a';
+};
+struct tagITEM3 {
+  bool a1 = true;
+  bool a2 = true;
+  bool a3 = true;
+  bool a4 = true;
+  bool a5 = true;
+  bool a6 = true;
+  bool a7 = true;
+};

@@ -1,0 +1,8 @@
+
+depend_ttl = ""
+str = "sub"
+
+sprintf2 depend_ttl "file_include_%s.ttl" str
+
+include depend_ttl
+

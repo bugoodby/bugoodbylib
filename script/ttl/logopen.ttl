@@ -1,0 +1,14 @@
+
+
+LOGPATH = ""
+getdir LOGPATH
+strconcat LOGPATH "\TeratermLog\"
+foldercreate LOGPATH
+
+getdate LOGNAME "teraterm_%Y%m%d_%H%M%S.log"
+strconcat LOGPATH LOGNAME
+
+messagebox LOGPATH 'test'
+
+logopen LOGPATH 0 0
+

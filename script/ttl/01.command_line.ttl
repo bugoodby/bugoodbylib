@@ -1,0 +1,27 @@
+
+str=""
+
+sprintf2 str 'paramcnt : %d\n' paramcnt
+
+sprintf2 substr 'param1 : %s\n' param1
+strconcat str substr
+sprintf2 substr 'param2 : %s\n' param2
+strconcat str substr
+sprintf2 substr 'param3 : %s\n' param3
+strconcat str substr
+sprintf2 substr 'param4 : %s\n' param4
+strconcat str substr
+sprintf2 substr 'param5 : %s\n' param5
+strconcat str substr
+sprintf2 substr 'param6 : %s\n' param6
+strconcat str substr
+sprintf2 substr 'param7 : %s\n' param7
+strconcat str substr
+sprintf2 substr 'param8 : %s\n' param8
+strconcat str substr
+sprintf2 substr 'param9 : %s\n' param9
+strconcat str substr
+
+
+strspecial str
+messagebox str 'title'

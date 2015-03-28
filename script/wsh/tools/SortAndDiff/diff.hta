@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Style-Type" content="text/css" /> 
+	<meta http-equiv="Content-Script-Type" content="text/javascript" /> 
+	<meta http-equiv="Content-Type" content="text/html; charset=shift_jis" /> 
+	<title>diff</title> 
+	<style>
+html,body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	background-color: #e0e0e0;
+	font: normal 12px "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+}
+#wrapper {
+	text-align: left;
+	margin: 0 auto 0;
+	width: 95%;
+	background-color: #ffffff;
+}
+#contents {
+	position: relative;
+	padding: 20px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 10px solid #e0e0e0;
+	border-bottom: 10px solid #e0e0e0;
+}
+textarea.twopane {
+	padding: 2px;
+	border: 1px solid #b8b8b8;
+	width: 95%;
+	height: 26em;
+}
+table.twopane {
+	border: 0px;
+	width: 100%;
+}
+td.twopane {
+	width: 50%;
+}
+input.solid {
+	padding: 2px;
+	border: 1px solid #b8b8b8;
+	width: 95%;
+}
+input.blue {
+	padding: 4px 10px;
+	background-color: #248;
+	color: #ffffff;
+	border-style: none;
+}
+input.blue:hover {
+    background-color: #24d;
+}
+textarea.scpane {
+	padding: 2px;
+	border: 1px solid #b8b8b8;
+	width: 95%;
+	height: 22em;
+}
+	</style>
+	<script type="text/javascript">
+<!--
+window.resizeTo(750, 600);    //  ウィンドウサイズ設定
+//window.moveTo(50, 50);      //  ウィンドウ移動
+
+var userAgent = window.navigator.userAgent.toLowerCase();
+if (userAgent.indexOf('msie') != -1) {
+	var newline = "\r\n";
+} else {
+	var newline = "\n";
+}
+
+function execDiff()
+{
+	var diffApp = "D:\\documents\\WinMergeU.exe"
+	var fso = new ActiveXObject("Scripting.FileSystemObject");
+	var wshShell = new ActiveXObject("WScript.Shell");
+	
+	var save_file = function( path, data ) {
+		var ws = fso.OpenTextFile(path, 2, true, 0);
+		ws.Write(data);
+		ws.close();
+	}
+	
+	var src = document.getElementById("lefttext").value;
+	var path1 = wshShell.CurrentDirectory + "\\lefttext.txt";
+	save_file(path1, src);
+	
+	var src = document.getElementById("righttext").value;
+	var path2 = wshShell.CurrentDirectory + "\\righttext.txt";
+	save_file(path2, src);
+	
+	wshShell.Run(diffApp + " \"" + path1 + "\" \"" + path2 + "\"" , 1, false);
+}
+
+function execSortAndDiffExcel()
+{
+	var fso = new ActiveXObject("Scripting.FileSystemObject");
+	
+	var RGB = function(red, green, blue) {
+		return (parseInt(red) + (parseInt(green) * 256) + (parseInt(blue) * 65536));
+	}
+	
+	// ユーザー設定値
+	var HEADER_ROW = 2;			// ヘッダの行番号
+	var LEFTLIST_COL = 2;		// 文字列リスト(左)を書き出す列番号
+	var RIGHTLIST_COL = 3;		// 文字列リスト(右)を書き出す列番号
+	// Excel定数
+	var xlWorkbookNormal		= -4143;
+	
+	//------------------------------------------
+	// 入力作業
+	//------------------------------------------
+	// 文字列リストを作成
+	var src = document.getElementById("lefttext").value;
+	var aryL = src.split(newline);
+	var src = document.getElementById("righttext").value;
+	var aryR = src.split(newline);
+	
+	var countL = aryL.length;
+	var countR = aryR.length;
+	
+	// 文字列リストをソート
+	aryL.sort();
+	aryR.sort();
+	
+	//------------------------------------------
+	// 出力作業
+	//------------------------------------------
+	// Excelオブジェクトの作成
+	var objExcel = new ActiveXObject("Excel.Application");
+	objExcel.Visible = true;
+	objExcel.DisplayAlerts = true;
+	
+	// 出力ファイルを新規作成
+	var objOutBook = objExcel.Workbooks.Add();
+	var objOutSheet = objOutBook.Worksheets(1);
+	objOutSheet.Select();
+	
+	// ヘッダの作成
+	objOutSheet.Cells(HEADER_ROW, LEFTLIST_COL).Value = "Left : " + countL;
+	objOutSheet.Cells(HEADER_ROW, LEFTLIST_COL).Interior.Color = RGB(192,192,192);
+	objOutSheet.Cells(HEADER_ROW, RIGHTLIST_COL).Value = "Right : " + countR;
+	objOutSheet.Cells(HEADER_ROW, RIGHTLIST_COL).Interior.Color = RGB(192,192,192);
+	
+	// リスト比較結果の作成
+	var i = HEADER_ROW + 1;
+	var l = 0, r = 0;
+	
+	while ( (l < countL) && (r < countR) ) {
+		if ( aryL[l] == aryR[r] ) {
+			objOutSheet.Cells(i, LEFTLIST_COL).Value = aryL[l];
+			objOutSheet.Cells(i, RIGHTLIST_COL).Value = aryR[r];
+			l++;
+			r++;
+		}
+		else if ( aryL[l] < aryR[r] ) {
+			objOutSheet.Cells(i, LEFTLIST_COL).Value = aryL[l];
+			objOutSheet.Cells(i, LEFTLIST_COL).Interior.Color = RGB(255,255,0);
+			l++;
+		}
+		else {
+			objOutSheet.Cells(i, RIGHTLIST_COL).Value = aryR[r];
+			objOutSheet.Cells(i, RIGHTLIST_COL).Interior.Color = RGB(255,255,0);
+			r++;
+		}
+		i++;
+	}
+	
+	while ( l < countL ) {
+		objOutSheet.Cells(i, LEFTLIST_COL).Value = aryL[l];
+		objOutSheet.Cells(i, LEFTLIST_COL).Interior.Color = RGB(255,255,0);
+		l++;
+		i++;
+	}
+	while ( r < countR ) {
+		objOutSheet.Cells(i, RIGHTLIST_COL).Value = aryR[r];
+		objOutSheet.Cells(i, RIGHTLIST_COL).Interior.Color = RGB(255,255,0);
+		r++;
+		i++;
+	}
+	
+	// 列の幅を自動調整
+	objOutSheet.Cells(1, LEFTLIST_COL).EntireColumn.AutoFit();
+	objOutSheet.Cells(1, RIGHTLIST_COL).EntireColumn.AutoFit();
+	
+	// オートフィルタの設定
+	rs = objOutSheet.Cells(HEADER_ROW, LEFTLIST_COL).address;
+	re = objOutSheet.Cells(i, RIGHTLIST_COL).address;
+	objOutSheet.Range(rs, re).AutoFilter();
+	
+	// 出力ファイルの保存
+	//var outXlsPath = WScript.ScriptFullName.replace(WScript.ScriptName, "diff_result.xls");
+    //objOutBook.SaveAs(outXlsPath, xlWorkbookNormal);
+	
+	// クローズ
+	//objOutBook.Close();
+	//objExcel.Quit();
+	
+	// オブジェクトの破棄
+	objExcel = null;
+	fso = null;
+}
+
+function onClickExec()
+{
+	var mode = "";
+	var modeAry = document.getElementsByName("mode");
+	for ( var i = 0; i < modeAry.length; i++ ) {
+		if ( modeAry[i].checked ) {
+			mode = modeAry[i].value;
+		}
+	}
+	switch ( mode ) {
+	case "Diff": execDiff(); break;
+	case "SortAndDiffExcel": execSortAndDiffExcel(); break;
+	default: break;
+	}
+}
+
+function onClickClear()
+{
+	document.getElementById("lefttext").value = "";
+	document.getElementById("righttext").value = "";
+}
+-->
+	</script>
+	<hta:application innerBorder="no" scroll="no"></hta:application>
+</head>
+<body>
+ 	<div id="wrapper"> 
+		<div id="contents">
+			<input type="radio" name="mode" value="Diff" checked>diff 
+			<input type="radio" name="mode" value="SortAndDiffExcel">SortAndDiffExcel 
+			<hr>
+			<table class="twopane">
+				<tr>
+				<td class="twopane">
+					Left<br><textarea class="twopane" id="lefttext" wrap="off"></textarea>
+				</td>
+				<td class="twopane">
+					Right<br><textarea class="twopane" id="righttext" wrap="off"></textarea>
+				</td>
+				</tr>
+			</table>
+			<br>
+			<input type="button" class="blue" name="sort" value="exec" onclick="onClickExec()">
+			<input type="button" class="blue" name="clear" value="clear" onclick="onClickClear()">
+		</div>
+	</div>
+</body>
+</html>

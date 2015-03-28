@@ -1,0 +1,7 @@
+this is a template file
+hogehoge
+fugafuga
+INSERT_HERE
+piyopiyo
+
+

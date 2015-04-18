@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "main.h"
+#include "stdio.h"
+#include <string>
 
 /* dialog box message cracker */
 #define HANDLE_DLG_MSG(hWnd, message, fn)						\
@@ -7,6 +9,81 @@
       HANDLE_##message((hWnd), (wParam), (lParam), (fn))))
 
 
+LPWSTR to_wstring( LPCSTR psz, UINT codePage )
+{
+	if ( !psz ) {
+		return NULL;
+	}
+
+	int len = ::MultiByteToWideChar(codePage, 0, psz, -1, NULL, 0);
+	if ( len == 0 ) {
+		return NULL;
+	}
+	LPWSTR buffer = (LPWSTR)malloc(len * sizeof(WCHAR));
+	if ( !buffer ) {
+		return NULL;
+	}
+
+	len = ::MultiByteToWideChar(codePage, 0, psz, -1, buffer, len);
+	if ( len == 0 ) {
+		free(buffer);
+		return NULL;
+	}
+	
+	return buffer;
+}
+
+void log( HWND hwnd, const wchar_t *format, ... )
+{
+	HWND hEdit = ::GetDlgItem(hwnd, IDC_EDIT1);
+	
+	va_list argp;
+	va_start( argp, format );
+	
+	size_t buf_len = _vscwprintf(format, argp) + 1;
+	wchar_t *pBuffer = (wchar_t*)malloc(buf_len * sizeof(wchar_t));
+
+	if ( pBuffer ) {
+		vswprintf_s(pBuffer, buf_len, format, argp);
+		
+		int len = ::GetWindowTextLength(hEdit);
+		::SendMessage(hEdit, EM_SETSEL, len, len);
+		::SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)pBuffer);
+		
+		free(pBuffer);
+	}
+
+	va_end( argp );
+	return;
+}
+
+void log( HWND hwnd, const char *format, ... )
+{
+	HWND hEdit = ::GetDlgItem(hwnd, IDC_EDIT1);
+	
+	va_list argp;
+	va_start( argp, format );
+	
+	size_t buf_len = _vscprintf(format, argp) + 1;
+	char *pBuffer = (char*)malloc(buf_len * sizeof(char));
+
+	if ( pBuffer ) {
+		vsprintf_s(pBuffer, buf_len, format, argp);
+		wchar_t *pBufferW = to_wstring(pBuffer, CP_ACP);
+		
+		if ( pBufferW ) {
+			int len = ::GetWindowTextLength(hEdit);
+			::SendMessage(hEdit, EM_SETSEL, len, len);
+			::SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)pBufferW);
+			free(pBufferW);
+		}
+
+		free(pBuffer);
+	}
+
+	va_end( argp );
+	return;
+}
 
 //-------------------------------------------------------------------
 //! click [Start] button
@@ -15,6 +92,8 @@ void MainDlg_OnClickBtnStart(HWND hwnd)
 {
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_START), FALSE);
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_STOP), TRUE);
+	
+	log(hwnd, L"MainDlg_OnClickBtnStart( hwnd=0x%x )\n", hwnd);
 }
 
 //-------------------------------------------------------------------
@@ -24,6 +103,8 @@ void MainDlg_OnClickBtnStop(HWND hwnd)
 {
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_START), TRUE);
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_STOP), FALSE);
+	
+	log(hwnd, "MainDlg_OnClickBtnStop( hwnd=0x%x )\n", hwnd);
 }
 
 //-------------------------------------------------------------------
@@ -70,6 +151,10 @@ BOOL MainDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_START), TRUE);
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_STOP), FALSE);
 	
+	wchar_t *str = L"This is a EditBox\r\n";
+	HWND hEdit = ::GetDlgItem(hwnd, IDC_EDIT1);
+	::SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)str);
+
 	return TRUE;
 }
 
@@ -107,7 +192,7 @@ void MainDlg_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 	default:
 		break;
 	}
-
+	
 	return;
 }
 

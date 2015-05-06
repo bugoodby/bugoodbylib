@@ -93,7 +93,7 @@ void MainDlg_OnClickBtnStart(HWND hwnd)
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_START), FALSE);
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_STOP), TRUE);
 	
-	log(hwnd, L"MainDlg_OnClickBtnStart( hwnd=0x%x )\n", hwnd);
+	log(hwnd, L"MainDlg_OnClickBtnStart( hwnd=0x%x )\r\n", hwnd);
 }
 
 //-------------------------------------------------------------------
@@ -104,7 +104,7 @@ void MainDlg_OnClickBtnStop(HWND hwnd)
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_START), TRUE);
 	Button_Enable(::GetDlgItem(hwnd, IDC_BTN_STOP), FALSE);
 	
-	log(hwnd, "MainDlg_OnClickBtnStop( hwnd=0x%x )\n", hwnd);
+	log(hwnd, "MainDlg_OnClickBtnStop( hwnd=0x%x )\r\n", hwnd);
 }
 
 //-------------------------------------------------------------------

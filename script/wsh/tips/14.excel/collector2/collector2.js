@@ -122,8 +122,8 @@ function ExcelDataCollector()
 		LOG("[target] " + f);
 		try {
 			// ÉwÉbÉ_çÏê¨
-			m_oOutSheet.Cells(m_row, 1).Value = f;
-			m_oOutSheet.Rows(m_row + ":" + m_row).Interior.Color = RGB(192,192,192);
+			m_oOutSheet.Cells(m_row, 1).Formula = '=HYPERLINK("' + f + '", "' + f + '")';
+			m_oOutSheet.Rows(m_row + ":" + m_row).Interior.Color = RGB(0xff,0xcc,0xff);
 			m_row++;
 			
 			// ëŒè€ExcelÇäJÇ≠

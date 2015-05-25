@@ -10,11 +10,13 @@ def http_request(method, uri, query_hash={})
 
 	case method.downcase!
 	when 'get'
-		return http.get(uri_parsed.path + '?' + query_escaped).body
+		return http.get(uri_parsed.path + '?' + query_escaped)
 	when 'post'
-		return http.post(uri_parsed.path, query_escaped).body
+		return http.post(uri_parsed.path, query_escaped)
 	end
 end
 
-puts http_request('POST', 'https://www.google.com/cloudprint/', {:hoge => 'HOGE', :huga => 'HUGA'})
-
+res = http_request('POST', 'https://www.google.com/cloudprint/search', {})
+puts res.code
+puts res.message
+puts res.body

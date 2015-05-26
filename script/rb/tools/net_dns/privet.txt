@@ -1,0 +1,13 @@
+# header
+WORD ID       = 0x0
+WORD Flag     = 0x0000
+WORD QD_Count = 1
+WORD AN_Count = 0
+WORD NS_Count = 0
+WORD AR_Count = 0
+
+
+# <QD>
+LABEL Name  = _privet._tcp.local
+WORD  Type  = 12
+WORD  Class = 0x1

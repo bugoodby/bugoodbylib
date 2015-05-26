@@ -3,25 +3,28 @@
 fp = FOPEN("uwsc_result.csv", F_WRITE)
 
 NUM = GETALLWIN()
-FPUT(fp, "ST_TITLE,ST_CLASS,ST_X,ST_Y,ST_WIDTH,ST_HEIGHT,ST_CLX,ST_CLY,ST_CLWIDTH,ST_CLHEIGHT,ST_PARENT,ST_PATH,ST_PROCESS")
+FPUT(fp, "WindowID,ST_TITLE,ST_CLASS,ST_X,ST_Y,ST_WIDTH,ST_HEIGHT,ST_CLX,ST_CLY,ST_CLWIDTH,ST_CLHEIGHT,ST_PARENT,ST_PATH,ST_PROCESS")
 For i = 0 to NUM-1
+	wid = ALL_WIN_ID[i]
 	line = ""
-	line = line + STATUS(ALL_WIN_ID[i], ST_TITLE) + ","			// タイトル
-	line = line + STATUS(ALL_WIN_ID[i], ST_CLASS) + ","			// クラス名
-	line = line + STATUS(ALL_WIN_ID[i], ST_X) + ","				// X座標
-	line = line + STATUS(ALL_WIN_ID[i], ST_Y) + ","				// Y座標
-	line = line + STATUS(ALL_WIN_ID[i], ST_WIDTH) + ","			// 幅
-	line = line + STATUS(ALL_WIN_ID[i], ST_HEIGHT) + ","		// 高さ
-	line = line + STATUS(ALL_WIN_ID[i], ST_CLX) + ","			// クライアント領域のX座標
-	line = line + STATUS(ALL_WIN_ID[i], ST_CLY) + ","			// クライアント領域のY座標
-	line = line + STATUS(ALL_WIN_ID[i], ST_CLWIDTH) + ","		// クライアント領域の幅
-	line = line + STATUS(ALL_WIN_ID[i], ST_CLHEIGHT) + ","		// クライアント領域の高さ
-	line = line + STATUS(ALL_WIN_ID[i], ST_PARENT) + ","		// 親ウィンドウのID
-	line = line + STATUS(ALL_WIN_ID[i], ST_PATH) + ","			// EXEのパス
-	line = line + STATUS(ALL_WIN_ID[i], ST_PROCESS) + ","		// プロセスID
+	line = line + wid + ","								// ウィンドウID
+	line = line + STATUS(wid, ST_TITLE) + ","			// タイトル
+	line = line + STATUS(wid, ST_CLASS) + ","			// クラス名
+	line = line + STATUS(wid, ST_X) + ","				// X座標
+	line = line + STATUS(wid, ST_Y) + ","				// Y座標
+	line = line + STATUS(wid, ST_WIDTH) + ","			// 幅
+	line = line + STATUS(wid, ST_HEIGHT) + ","		// 高さ
+	line = line + STATUS(wid, ST_CLX) + ","			// クライアント領域のX座標
+	line = line + STATUS(wid, ST_CLY) + ","			// クライアント領域のY座標
+	line = line + STATUS(wid, ST_CLWIDTH) + ","		// クライアント領域の幅
+	line = line + STATUS(wid, ST_CLHEIGHT) + ","		// クライアント領域の高さ
+	line = line + STATUS(wid, ST_PARENT) + ","		// 親ウィンドウのID
+	line = line + STATUS(wid, ST_PATH) + ","			// EXEのパス
+	line = line + STATUS(wid, ST_PROCESS) + ","		// プロセスID
 	FPUT(fp, line)
 Next
 
+MSGBOX("ウィンドウ一覧の生成が完了しました")
 
 id = GetID("Form1")
 for i = 0 to GetItem(id, ITM_LIST, 1)-1

@@ -8,7 +8,7 @@ if "%1"=="" (
 	exit 0
 )
 
-set uwsc=C:\mywork\UWSC\UWSC.exe
-"%uwsc%" "%1"
+set script=%BATCHDIR%\packDNS.rb
+ruby -Ku "%script%" "%1"
 
-
+pause

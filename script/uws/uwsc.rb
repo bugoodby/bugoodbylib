@@ -1,6 +1,6 @@
 #!/bin/ruby
 
-$uwscApp = "D:\\mydoc\\Documents\\app\\UWSC\\uwsc501\\UWSC.exe"
+$uwscApp = "C:\mywork\UWSC\UWSC.exe"
 $scriptDir = File.dirname(File.expand_path($0))
 
 if ( ARGV.length == 0 ) then

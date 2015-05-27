@@ -28,7 +28,7 @@ function ExecScript()
 
 function exec_uwsc( script, args )
 {
-	var uwsc = "C:\\app\\uwsc.exe";
+	var uwsc = "C:\\mywork\\UWSC\\UWSC.exe";
 	
 	if ( ! fso.FileExists(uwsc) ) {
 		LOG("[ERROR] file not found : " + uwsc)

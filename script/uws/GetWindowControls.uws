@@ -1,25 +1,35 @@
 //
-// デスクトップ上のすべてのウィンドウ情報を取得
+// 指定したウィンドウのコントロール一覧を出力する
 //
 
-fp = FOPEN("result_ShowAllWndInfo.csv", F_WRITE)
+winName = INPUT("ウィンドウタイトルを入力してください")
+wid = GETID(winName)
 
-NUM = GETALLWIN()
+
+fp = FOPEN("result_GetWindowControls.csv", F_WRITE)
+
 FPUT(fp, "WindowID,Handle,ST_TITLE,ST_CLASS,ST_X,ST_Y,ST_WIDTH,ST_HEIGHT,ST_CLX,ST_CLY,ST_CLWIDTH,ST_CLHEIGHT,ST_PARENT,ST_PATH,ST_PROCESS,ST_WIN64")
-For i = 0 to NUM-1
-	wid = ALL_WIN_ID[i]
-	line = GetWindowInfoFromID(wid)
-	FPUT(fp, line)
-Next
+line = GetWindowInfoFromID(wid)
+FPUT(fp, line)
 
-MSGBOX("ウィンドウ一覧の生成が完了しました")
+OutputControls(fp, wid, ITM_BTN, "ITM_BTN")
+OutputControls(fp, wid, ITM_LIST, "ITM_LIST")
+OutputControls(fp, wid, ITM_TAB, "ITM_TAB")
+OutputControls(fp, wid, ITM_MENU, "ITM_MENU")
+OutputControls(fp, wid, ITM_TREEVEW, "ITM_TREEVEW")
+OutputControls(fp, wid, ITM_LSTVEW, "ITM_LSTVEW")
+OutputControls(fp, wid, ITM_EDIT, "ITM_EDIT")
+OutputControls(fp, wid, ITM_STATIC, "ITM_STATIC")
+OutputControls(fp, wid, ITM_STATUSBAR, "ITM_STATUSBAR")
+OutputControls(fp, wid, ITM_TOOLBAR, "ITM_TOOLBAR")
+OutputControls(fp, wid, ITM_ACCCLK, "ITM_ACCCLK")
+OutputControls(fp, wid, ITM_ACCTXT, "ITM_ACCTXT")
 
-id = GetID("Form1")
-for i = 0 to GetItem(id, ITM_LIST, 1)-1
-  print ALL_ITEM_LIST[i]
-next
+
 
 FCLOSE(fp)
+
+
 
 
 FUNCTION GetWindowInfoFromID( id )
@@ -43,3 +53,18 @@ FUNCTION GetWindowInfoFromID( id )
 	
 	RESULT = line
 FEND
+
+
+FUNCTION OutputControls( fp, id, type, typestr )
+	FPUT(fp, typestr)
+	itemNum = GetItem(id, type, -1)
+	For i = 0 to itemNum - 1
+		ctlName = ALL_ITEM_LIST[i]
+		ctlhnd = GETCTLHND(id, ctlName)
+		line = ", Control[" + i + "]," + ctlName + "," + ctlhnd
+		FPUT(fp, line)
+	Next
+	
+	RESULT = True
+FEND
+

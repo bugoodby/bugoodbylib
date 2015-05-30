@@ -14,11 +14,6 @@ Next
 
 MSGBOX("ウィンドウ一覧の生成が完了しました")
 
-id = GetID("Form1")
-for i = 0 to GetItem(id, ITM_LIST, 1)-1
-  print ALL_ITEM_LIST[i]
-next
-
 FCLOSE(fp)
 
 

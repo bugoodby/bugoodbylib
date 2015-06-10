@@ -1,0 +1,21 @@
+//
+// 指定したウィンドウのエディットボックスに番号を入力する
+//
+STOPFORM(TRUE)
+
+FUKIDASI("Please ALT + Click for Check EditBox Index.")
+While 1
+	Ifb GETKEYSTATE(VK_ALT) And GETKEYSTATE(VK_LBUTTON) Then 
+		wid = GETID(GET_FROMPOINT_WIN)
+		
+		itemNum = GetItem(wid, ITM_EDIT, -1)
+		For i = 0 to itemNum - 1
+			ctlName = ALL_ITEM_LIST[i]
+			SENDSTR(wid, "" + (0-i-1), (0-i-1), TRUE)
+//			SENDSTR(wid, "" + (i+1), (i+1), TRUE)
+		Next
+	Else
+		SLEEP(0.5)
+	Endif
+Wend
+

@@ -1,3 +1,6 @@
+//
+// カーソル下のコントロールの情報をふきだし表示
+//
 STOPFORM(TRUE)
 
 While True

@@ -1,0 +1,114 @@
+//
+// 指定したウィンドウのコントロール一覧を出力する
+//
+STOPFORM(TRUE)
+
+PUBLIC HASHTBL WIND = HASH_CASECARE
+PUBLIC HASHTBL CONT = HASH_CASECARE
+PUBLIC winFile = "GetWindowControls3-Window.txt"
+PUBLIC ctlFile = "GetWindowControls3-Control.txt"
+
+CreateWindowInfo()
+CreateControlInfo()
+
+While 1
+	num = GETALLWIN()
+	For i = 0 To num - 1
+		Ifb STATUS(ALL_WIN_ID[i], ST_TITLE) <> "" And STATUS(ALL_WIN_ID[i], ST_ACTIVE) = True Then
+//			FUKIDASI("UWSC: Getting Window Information...")
+			
+			wid = ALL_WIN_ID[i]
+			winName = STATUS(wid, ST_TITLE)
+			clsName = STATUS(wid, ST_CLASS)
+			
+			line = winName + "<#TAB>" + clsName
+			WriteWindowInfo(line)
+			
+			WriteItemInfo(wid, winName, ITM_BTN, "ITM_BTN")
+			WriteItemInfo(wid, winName, ITM_LIST, "ITM_LIST")
+			WriteItemInfo(wid, winName, ITM_TAB, "ITM_TAB")
+			WriteItemInfo(wid, winName, ITM_MENU, "ITM_MENU")
+			WriteItemInfo(wid, winName, ITM_TREEVEW, "ITM_TREEVEW")
+			WriteItemInfo(wid, winName, ITM_LSTVEW, "ITM_LSTVEW")
+			WriteItemInfo(wid, winName, ITM_EDIT, "ITM_EDIT")
+//			WriteItemInfo(wid, winName, ITM_STATIC, "ITM_STATIC")
+//			WriteItemInfo(wid, winName, ITM_STATUSBAR, "ITM_STATUSBAR")
+			WriteItemInfo(wid, winName, ITM_TOOLBAR, "ITM_TOOLBAR")
+			
+			FUKIDASI("UWSC: Got Window Information [" + winName + "]")
+		Endif
+	Next
+	SLEEP(0.2)
+Wend
+FUKIDASI("")
+
+
+PROCEDURE CreateWindowInfo()
+	title = "Window<#TAB>Class"
+	fp = FOPEN(winFile, F_WRITE1)
+	Ifb fp <> -1 Then
+		FPUT(fp, title)
+		FCLOSE(fp)
+	Endif
+FEND
+
+PROCEDURE WriteWindowInfo( line )
+	Ifb WIND[line, HASH_EXISTS] = False Then
+		fp = FOPEN(winFile, F_READ or F_WRITE1)
+		Ifb fp <> -1 Then
+			FPUT(fp, line)
+			WIND[line] = "1"
+			FCLOSE(fp)
+		Endif
+	Endif
+FEND
+
+PROCEDURE CreateControlInfo()
+	title = "Window<#TAB>DefineName<#TAB>Control(JP)<#TAB>Control(US)<#TAB>Type<#TAB>Index"
+	fp = FOPEN(ctlFile, F_WRITE1)
+	Ifb fp <> -1 Then
+		FPUT(fp, title)
+		FCLOSE(fp)
+	Endif
+FEND
+
+PROCEDURE WriteControlInfo( line, index )
+	If index > 0 Then str = line + "<#TAB>" + index Else str = line
+	Ifb CONT[str, HASH_EXISTS] = False Then
+		fp = FOPEN(ctlFile, F_READ or F_WRITE1)
+		Ifb fp <> -1 Then
+			FPUT(fp, str)
+			CONT[str] = "1"
+			FCLOSE(fp)
+		Endif
+	Endif
+FEND
+
+PROCEDURE WriteItemInfo( wid, wname, type, typestr )
+	GetItem(wid, type, -1)
+	
+	Ifb type = ITM_EDIT Then
+		num = GetItem(wid, type, -1)
+		For i = 0 To num - 1
+			line = wname + "<#TAB><#TAB>Edit_" + (i+1) + "<#TAB><#TAB>" + typestr
+			WriteControlInfo(line, i+1)
+		Next
+	Else
+		firstNum = GetItem(wid, type, 1)
+		totalNum = GetItem(wid, type, -1)
+		Ifb totalNum = firstNum Then
+			For i = 0 To totalNum - 1
+				line = wname + "<#TAB><#TAB>" + ALL_ITEM_LIST[i] + "<#TAB><#TAB>" + typestr
+				WriteControlInfo(line, -1)
+			Next
+		Else
+			For i = 1 To totalNum
+				ctlNum = GetItem(wid, type, i)
+				For j = 0 to ctlNum - 1
+					line = wname + "<#TAB><#TAB>" + ALL_ITEM_LIST[j] + "<#TAB><#TAB>" + typestr
+					WriteControlInfo(line, i)
+				Next
+			Next
+		Endif
+	Endif
+FEND

@@ -45,6 +45,9 @@ function ExecScript()
 	Sample_ExcelTableReader();
 }
 
+//----------------------------
+// 基本テスト
+//----------------------------
 function Sample_ReadExcel()
 {
 	var file = WScript.ScriptFullName.replace(WScript.ScriptName, "test1.xls");
@@ -57,9 +60,13 @@ function Sample_ReadExcel()
 	var objBook = objExcel.Workbooks.Open(file);
 	var objSheet = objBook.WorkSheets(1);
 	
-	LOG( "Cells(7, 4): " + objSheet.Cells(7, 4).Text );
-	LOG( "Range(D7)  : " + objSheet.Range("D7").Text );
+	LOG( "Text" );
+	LOG( "  - Cells(7,4): " + objSheet.Cells(7,4).Text );
+	LOG( "  - Range(D7)  : " + objSheet.Range("D7").Text );
 	
+	LOG( "Range <-> Cells" );
+	LOG( "  - Range(D7) => Cells(" + objSheet.Range("D7").Row + "," + objSheet.Range("D7").Column + ")" );
+	LOG( "  - Cells(7,4) => Range(" + objSheet.Cells(7,4).Address + ")" );
 	
 	objBook.Close();
 	
@@ -67,6 +74,9 @@ function Sample_ReadExcel()
 	objExcel = null;
 }
 
+//----------------------------
+// TableReaderテスト
+//----------------------------
 function Sample_ExcelTableReader()
 {
 	var file = WScript.ScriptFullName.replace(WScript.ScriptName, "test1.xls");
@@ -103,6 +113,7 @@ function ExcelTableReader()
 	var m_lastCol = 0;
 	var m_hdr = {};
 	
+	// xlsファイルを開きテーブルを解析する
 	this.Open = function( filespec, opt_sheet_name, opt_header_row, opt_start_col )
 	{
 		sheetname = opt_sheet_name || "Sheet1";
@@ -137,17 +148,23 @@ function ExcelTableReader()
 		return true;
 	}
 	
+	// xlsファイルを閉じる
 	this.Close = function()
 	{
 		m_oExcel.Quit();
 		m_oExcel = null;
 	}
 	
+	// テーブルの行数を返す
 	this.GetRowCount = function()
 	{
 		return m_lastRow - HEADER_ROW;
 	}
 	
+	// テーブルの
+	//  - rowNumber行目
+	//  - 項目名がitemName
+	// であるセルの値を返す
 	this.GetText = function( rowNumber, itemName )
 	{
 		var c = m_hdr[itemName];
@@ -158,6 +175,10 @@ function ExcelTableReader()
 		return m_oSheet.Cells(HEADER_ROW + rowNumber, c).Text;
 	}
 	
+	// テーブルの
+	//  - rowNumber行目
+	//  - 項目名がitemName
+	// であるセルの値を、１行テキストの配列として返す
 	this.GetTextArray = function( rowNumber, itemName )
 	{
 		var c = m_hdr[itemName];
@@ -173,6 +194,10 @@ function ExcelTableReader()
 		return b;
 	}
 	
+	// テーブルの
+	//  - rowNumber行目
+	//  - 項目名がitemName
+	// であるセルの背景色を返す
 	this.GetColor = function( rowNumber, itemName )
 	{
 		var c = m_hdr[itemName];

@@ -1,5 +1,3 @@
-
-//-----------------------------------------------------------
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 
 main( WScript.Arguments.Count(), WScript.Arguments );
@@ -27,8 +25,8 @@ function main( argc, argv )
 
 function ExecScript( filespec )
 {
-	// resultフォルダ作成
-	var resultDir = WScript.ScriptFullName.replace(WScript.ScriptName, "result\\");
+	// 出力フォルダ作成
+	var resultDir = WScript.ScriptFullName.replace(WScript.ScriptName, "source\\");
 	if ( fso.FolderExists(resultDir) ) {
 		LOG("[del] " + resultDir + "\\*");
 		fso.DeleteFile(resultDir + "\\*", true);

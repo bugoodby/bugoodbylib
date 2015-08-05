@@ -1,7 +1,7 @@
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 
+main( WScript.Arguments.Count(), WScript.Arguments );
 
-WScript.Quit(main( WScript.Arguments.Count(), WScript.Arguments ));
 function main( argc, argv ) 
 {
 	if ( argc != 1 ) {
@@ -61,8 +61,7 @@ function ExecScript( filespec )
 	objExcel.Visible = true;			// ウィンドウ表示
 	objExcel.DisplayAlerts = false;		// アラート設定
 	
-	objExcel.Workbooks.Open(filespec);
-	var objBook = objExcel.Workbooks(objExcel.Workbooks.Count);
+	var objBook = objExcel.Workbooks.Open(filespec);
 	
 	var names = [];
 	var objSheets = objBook.WorkSheets;

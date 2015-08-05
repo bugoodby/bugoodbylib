@@ -1,4 +1,5 @@
-WScript.Quit(main( WScript.Arguments.Count(), WScript.Arguments ));
+main( WScript.Arguments.Count(), WScript.Arguments );
+
 function main( argc, argv ) 
 {
 	if ( argc != 1 ) {
@@ -56,8 +57,7 @@ function ExecScript( filespec )
 	objExcel.Visible = true;			// ウィンドウ表示
 	
 	// Excelファイルを開く
-	objExcel.Workbooks.Open(filespec);
-	var objBook = objExcel.Workbooks(objExcel.Workbooks.Count);
+	var objBook = objExcel.Workbooks.Open(filespec);
 	
 	//------------------------------------------
 	// excel 本処理

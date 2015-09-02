@@ -1,0 +1,15 @@
+#include <stdio.h>
+
+
+#define hogehoge  1
+#define THIS_IS_A_PEN    0x13
+
+
+#define A01    23   //comment.
+
+
+int main( int argc, char **argv )
+{
+	printf("Hello, World!\n");
+	return 0;
+}

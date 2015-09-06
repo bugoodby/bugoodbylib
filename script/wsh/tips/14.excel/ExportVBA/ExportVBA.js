@@ -26,7 +26,9 @@ function main( argc, argv )
 function ExecScript( filespec )
 {
 	// 出力フォルダ作成
-	var resultDir = WScript.ScriptFullName.replace(WScript.ScriptName, "source\\");
+	//var resultDir = WScript.ScriptFullName.replace(WScript.ScriptName, "VBA_source\\");
+	var resultDir = fso.GetParentFolderName(filespec) + "\\VBA_source\\";
+	
 	if ( fso.FolderExists(resultDir) ) {
 		LOG("[del] " + resultDir + "\\*");
 		fso.DeleteFile(resultDir + "\\*", true);

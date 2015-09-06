@@ -14,16 +14,17 @@ function main( argc, argv )
 		return wshShell.Run(cmd, 1, true);
 	}
 	
-	return ExecScript();
+	return ExecScript(argv(0));
 }
 
-function ExecScript()
+function ExecScript( filespec )
 {
-	var root = WScript.ScriptFullName.replace(WScript.ScriptName, "");
+//	var root = WScript.ScriptFullName.replace(WScript.ScriptName, "");
+//	var json = eval( fso.OpenTextFile( root + "test.json", 1 ).ReadAll() );
+	var json = eval( "(" + fso.OpenTextFile( filespec, 1 ).ReadAll() + ")" );
 	
-	var json = eval( fso.OpenTextFile( root + "test.json", 1 ).ReadAll() );
 	LOG_ARRAY(json);
-	LOG_ARRAY(json[0]);
+//	LOG_ARRAY(json[0]);
 }
 
 function LOG( str )

@@ -1,4 +1,6 @@
 var fso = new ActiveXObject("Scripting.FileSystemObject");
+var xlPasteValues = -4163;
+
 
 main( WScript.Arguments.Count(), WScript.Arguments );
 
@@ -22,24 +24,40 @@ function ExecScript()
 {
 	var file = WScript.ScriptFullName.replace(WScript.ScriptName, "database.csv");
 	
+	// Excelオブジェクトの作成
+	var objExcel = new ActiveXObject("Excel.Application");
+	objExcel.Visible = true;
+	objExcel.DisplayAlerts = false;
+	
 	var reader = new ExcelTableReader();
 	if ( ! reader.Open(file, 1, 7, 1) ) {
 		return false;
 	}
 	
-	var count = reader.GetRowCount();
-	for ( var r = 1; r <= count; r++ )
-	{
-		LOG("--------");
-		LOG( reader.GetText(r, "名称") );
-		
-		var color = reader.GetColor(r, "大項目");
-		LOG("color = " + color + "  " + ( color == RGB(255, 255, 255) ) ? "while" : "others");
-	}
+	// 結果ファイルのdataシートを選択
+	var outPath = WScript.ScriptFullName.replace(WScript.ScriptName, "out.xlsx");
+	var objOutBook = objExcel.Workbooks.Open(outPath);
+	var objOutSheet = objOutBook.WorkSheets("Sheet1");
+	
+	reader.CopyItems("大項目");
+	objOutSheet.Cells(2,1).PasteSpecial(xlPasteValues);
+	
+	reader.CopyItems("ID");
+	objOutSheet.Cells(2,2).PasteSpecial(xlPasteValues);
+	
+	reader.CopyItems("テスト");
+	objOutSheet.Cells(2,3).PasteSpecial(xlPasteValues);
 	
 	reader.CopyItems("合計");
+	objOutSheet.Cells(2,6).PasteSpecial(xlPasteValues);
 	
 	reader.Close();
+	
+	objOutBook.WorkSheets("Sheet2").PivotTables("ﾋﾟﾎﾞｯﾄﾃｰﾌﾞﾙ1").PivotCache().Refresh();
+	
+	objOutBook.Save();
+	objOutBook.Close();
+	objExcel.Quit();
 }
 
 
@@ -183,11 +201,6 @@ function ExcelTableReader()
 		LOG(copyRange);
 		m_oSheet.Range(copyRange).Copy();
 	}
-}
-
-function RGB(red, green, blue)
-{
-	return (parseInt(red) + (parseInt(green) * 256) + (parseInt(blue) * 65536));
 }
 
 function LOG( str )

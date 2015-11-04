@@ -1,10 +1,3 @@
-//------------------------------------------------
-// D&Dされたヘッダファイルから
-//  - cpca_attribute.csv
-//  - cpca_attdef.jsの[global tables]以降
-// を更新
-//
-//------------------------------------------------
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 var wshShell = new ActiveXObject("WScript.Shell");
 
@@ -13,7 +6,7 @@ WScript.Quit(main( WScript.Arguments.Count(), WScript.Arguments ));
 function main( argc, argv ) 
 {
 	if ( argc < 1 ) {
-		WScript.Echo("ファイルを指定してください");
+		WScript.Echo("ファイルを１行ずつ読み、正規表現に一致したら別ファイルに出力します\nファイルを指定してください");
 		return 1;
 	}
 	// WScriptならCScriptで起動し直し
@@ -32,12 +25,12 @@ function main( argc, argv )
 	return 0;
 }
 
-// ファイルを１行ずつ舐め、正規表現に一致したら別ファイルに出力
+// ファイルを１行ずつ読み、正規表現に一致したら別ファイルに出力
 function ExtractFromFile( filespec )
 {
 	var out_file = WScript.ScriptFullName.replace(WScript.ScriptName, "ExtractFromFile.txt");
-	
 	var ws = fso.OpenTextFile(out_file, 2/*ForWriting*/, true, 0);
+	
 	var rs = fso.OpenTextFile(filespec, 1/*ForReading*/, false, 0);
 	var text = rs.ReadAll();
 	rs.Close();

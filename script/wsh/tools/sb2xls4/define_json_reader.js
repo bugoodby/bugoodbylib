@@ -14,18 +14,21 @@ function main( argc, argv )
 		return wshShell.Run(cmd, 1, true);
 	}
 	
-	return ExecScript(argv(0));
+	return ExecScript();
 }
 
-function ExecScript( filespec )
+function ExecScript()
 {
-//	var root = WScript.ScriptFullName.replace(WScript.ScriptName, "");
-//	var json = eval( fso.OpenTextFile( root + "test.json", 1 ).ReadAll() );
-	var json = eval( fso.OpenTextFile( filespec, 1 ).ReadAll() );
-//	var json = eval( "(" + fso.OpenTextFile( filespec, 1 ).ReadAll() + ")" );
+	var filespec = WScript.ScriptFullName.replace(WScript.ScriptName, "define.json");
+	var def = eval( fso.OpenTextFile( filespec, 1 ).ReadAll() );
 	
-	LOG_ARRAY(json);
-	LOG_ARRAY(json[0]);
+	for ( var groupID in def ) {
+		LOG(groupID);
+		for ( var recordID in def[groupID] ) {
+			LOG("  " + recordID);
+			LOG("    " + def[groupID][recordID].TrackID);
+		}
+	}
 }
 
 function LOG( str )

@@ -20,7 +20,7 @@ function main( argc, argv )
 function ExecScript()
 {
 	var filespec = WScript.ScriptFullName.replace(WScript.ScriptName, "define.json");
-	var def = eval( fso.OpenTextFile( filespec, 1 ).ReadAll() );
+	var def = eval( "(" + fso.OpenTextFile( filespec, 1 ).ReadAll() + ");" );
 	
 	for ( var groupID in def ) {
 		LOG(groupID);

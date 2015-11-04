@@ -1,6 +1,4 @@
-[
-  {
-    1: { "sheet": "URL_List", "row": 1, "col": 2 }, 
-    2: { "sheet": "URL_List", "row": 5, "col": 10 }
-  }
-];
+{
+	0: { "sheet": "URL_List", "row": 1, "col": 2 }, 
+	1: { "sheet": "URL_List", "row": 5, "col": 10 }
+}

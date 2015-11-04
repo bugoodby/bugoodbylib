@@ -21,8 +21,7 @@ function ExecScript()
 	// json‚Éo—Í
 	var outfile = WScript.ScriptFullName.replace(WScript.ScriptName, "define.json");
 	var ws = fso.OpenTextFile(outfile, 2/*ForWriting*/, true, 0/*ASCII*/);
-	ws.WriteLine("(");
-	ws.WriteLine("  {");
+	ws.WriteLine("{");
 	
 	
 	try {
@@ -67,17 +66,17 @@ function ExecScript()
 			
 			// json‚Éo—Í
 //			if ( Records.length > 0 ) {
-				ws.WriteLine("    \"" + GroupID + "\": {");
+				ws.WriteLine("  \"" + GroupID + "\": {");
 				for ( var j = 0; j < Records.length; j++ ) {
-					ws.WriteLine("      \"" + Records[j].Index + "\": {");
-					ws.WriteLine("        TrackID: \"" + Records[j].TrackID + "\", ");
-					ws.WriteLine("        SSID: \"" + Records[j].SSID + "\", ");
-					ws.WriteLine("        Title: \"" + Records[j].Title + "\" ");
-					if ( j == Records.length - 1 ) ws.WriteLine("      }");
-					else                           ws.WriteLine("      },");
+					ws.WriteLine("    \"" + Records[j].Index + "\": {");
+					ws.WriteLine("      \"TrackID\": \"" + Records[j].TrackID + "\", ");
+					ws.WriteLine("      \"SSID\": \"" + Records[j].SSID + "\", ");
+					ws.WriteLine("      \"Title\": \"" + Records[j].Title + "\" ");
+					if ( j == Records.length - 1 ) ws.WriteLine("    }");
+					else                           ws.WriteLine("    },");
 				}
-				if ( i == sheet_names.length - 1 ) ws.WriteLine("    }");
-				else                               ws.WriteLine("    },");
+				if ( i == sheet_names.length - 1 ) ws.WriteLine("  }");
+				else                               ws.WriteLine("  },");
 //			}
 		}
 		
@@ -94,8 +93,7 @@ function ExecScript()
 	}
 	
 	// json‚Éo—Í
-	ws.WriteLine("  }");
-	ws.WriteLine(");");
+	ws.WriteLine("}");
 	ws.Close();
 	
 	return true;

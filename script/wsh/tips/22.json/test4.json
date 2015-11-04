@@ -1,6 +1,36 @@
-(
-  {
-    0: { "sheet": "URL_List", "row": 1, "col": 2 }, 
-    1: { "sheet": "URL_List", "row": 5, "col": 10 }
+{
+  "A01": {
+    "01": {
+      "TrackID": "id0001", 
+      "SSID": "aaa", 
+      "Title": "Drill " 
+    },
+    "02": {
+      "TrackID": "id0002", 
+      "SSID": "bbb", 
+      "Title": "Itch" 
+    },
+    "03": {
+      "TrackID": "id0003", 
+      "SSID": "ccc", 
+      "Title": "My Iron Lung" 
+    }
+  },
+  "A02": {
+    "01": {
+      "TrackID": "id0001", 
+      "SSID": "aaa", 
+      "Title": "No Surprises" 
+    },
+    "02": {
+      "TrackID": "id0002", 
+      "SSID": "bbb", 
+      "Title": "Airbag" 
+    },
+    "03": {
+      "TrackID": "id0003", 
+      "SSID": "ccc", 
+      "Title": "I Might Be Wrong" 
+    }
   }
-);
+}

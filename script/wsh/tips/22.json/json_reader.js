@@ -21,8 +21,8 @@ function ExecScript( filespec )
 {
 //	var root = WScript.ScriptFullName.replace(WScript.ScriptName, "");
 //	var json = eval( fso.OpenTextFile( root + "test.json", 1 ).ReadAll() );
-	var json = eval( fso.OpenTextFile( filespec, 1 ).ReadAll() );
-//	var json = eval( "(" + fso.OpenTextFile( filespec, 1 ).ReadAll() + ")" );
+//	var json = eval( fso.OpenTextFile( filespec, 1 ).ReadAll() );
+	var json = eval( "(" + fso.OpenTextFile( filespec, 1 ).ReadAll() + ");" );
 	
 	LOG_ARRAY(json);
 	LOG_ARRAY(json[0]);

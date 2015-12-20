@@ -1,13 +1,12 @@
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 var wshShell = new ActiveXObject("WScript.Shell");
 
-WScript.Quit(main( WScript.Arguments.Count(), WScript.Arguments ));
-
+main( WScript.Arguments.Count(), WScript.Arguments );
 function main( argc, argv ) 
 {
 	if ( argc < 1 ) {
 		WScript.Echo("ファイルを１行ずつ読み、正規表現に一致したら別ファイルに出力します\nファイルを指定してください");
-		return 1;
+		return;
 	}
 	// WScriptならCScriptで起動し直し
 	if ( WScript.FullName.substr(WScript.FullName.length - 11, 11).toUpperCase() == "WSCRIPT.EXE" ) {
@@ -21,8 +20,6 @@ function main( argc, argv )
 	}
 	
 	ExtractFromFile(argv(0));
-	
-	return 0;
 }
 
 // ファイルを１行ずつ読み、正規表現に一致したら別ファイルに出力

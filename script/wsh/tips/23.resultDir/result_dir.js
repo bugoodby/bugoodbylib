@@ -14,7 +14,7 @@ function main( argc, argv )
 		return wshShell.Run(cmd, 1, true);
 	}
 	
-	return ExecScript();
+	ExecScript();
 }
 
 function ExecScript()

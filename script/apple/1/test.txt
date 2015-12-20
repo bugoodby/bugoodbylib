@@ -1,0 +1,8 @@
+{
+	"tag": "A4_P_staple1_punchON",
+	"data": "/Users/matsunag/Documents/aapautoprint/s_A4_P_2p.pdf",
+	"printer": "Simulated Color Laser @ MBA", 
+	"ori": "P",
+	"staple": "1 箇所",
+	"punch": "ON"
+}

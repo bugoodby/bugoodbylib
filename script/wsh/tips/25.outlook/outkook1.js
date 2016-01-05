@@ -22,7 +22,7 @@ function ExecScript()
 	var olFolderInbox = 6;
 	
 	var objOutlook = new ActiveXObject("Outlook.Application");
-	var objNAMESPC = objOutlook.GetNamespec("MAPI");
+	var objNAMESPC = objOutlook.GetNamespace("MAPI");
 	
 	var myfolder = objNAMESPC.GetDefaultFolder(olFolderInbox).Folders("SubFolder");
 	

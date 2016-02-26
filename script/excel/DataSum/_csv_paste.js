@@ -1,6 +1,6 @@
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 
-WScript.Quit(main( WScript.Arguments.Count(), WScript.Arguments ));
+main( WScript.Arguments.Count(), WScript.Arguments );
 function main( argc, argv ) 
 {
 	if ( WScript.FullName.substr(WScript.FullName.length - 11, 11).toUpperCase() == "WSCRIPT.EXE" ) {
@@ -48,6 +48,8 @@ function ExecScript( filespec )
 	objCsvSheet.Cells.Copy();
 	objOutSheet.Cells.PasteSpecial();
 	
+	// 集計シートを選択
+	objOutBook.WorkSheets("aggrigate").Activate();
 	
 	// CSVファイルを閉じる
 	objCsvBook.Close();

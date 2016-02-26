@@ -1,0 +1,41 @@
+url=''
+base=''
+target=''
+
+;---------------------------------------
+; 続行するか確認
+;---------------------------------------
+yesnobox '続行しますか？' 'title'
+if result=0 then
+	messagebox '終了します' 'title'
+	end
+endif
+
+
+;---------------------------------------
+; 入力を受付
+;---------------------------------------
+inputbox '本文' 'タイトル'
+url=inputstr
+strreplace url 1 'https://' 'http://'
+messagebox url '入力文字'
+
+; urlからbasenameを抽出
+strmatch url '([^/]+)$'
+if result=0 then
+	messagebox 'マッチしませんでした' 'Error'
+	end
+else
+	base=matchstr
+	messagebox base 'base'
+endif
+
+strmatch base '^([^-]+)'
+if result=0 then
+	messagebox 'マッチしませんでした' 'Error'
+	end
+else
+	target=matchstr
+	messagebox target 'target'
+endif
+

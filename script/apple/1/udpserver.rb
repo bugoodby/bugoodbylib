@@ -32,7 +32,7 @@ end
 def main() 
 
 	if ARGV.length == 0
-		puts "usage: udpserver.rb <port num>"
+		puts "usage: #{File.basename($0)} <port num>"
 		exit
 	end
 	

@@ -1,0 +1,96 @@
+on subfunc(aSetting)
+	tell application "System Events"
+		tell sheet 1 of window 1 of process "Preview"
+			-- プリンタ
+			click menu item (printer of aSetting) of menu 1 of (click pop up button 1)
+			delay 0.5
+			
+			-- 用紙サイズ
+			click menu item (psize of aSetting) of menu 1 of (click pop up button 3)
+			
+			-- 方向
+			if (ori of aSetting) is "L" then
+				click radio button 2 of radio group 2
+			end if
+			
+			-- 印刷設定
+			click menu item "Finishing Options" of menu 1 of (click pop up button 4)
+			delay 0.5
+			
+			-- 仕上げオプション
+			--- ステープル
+			click menu item (staple of aSetting) of menu 1 of (click pop up button 5)
+			
+			--- パンチ
+			if (punch of aSetting) is "ON" then
+				tell checkbox "Punch" to if not (its value as boolean) then click
+			end if
+			
+			--- 排紙トレイ
+			--click menu item "上" of menu 1 of (click pop up button 6)
+			--- 折りたたむ
+			--click menu item "レター" of menu 1 of (click pop up button 7)
+			
+			click button "Print"
+		end tell
+	end tell
+end subfunc
+
+on PrintToSimAndSave(aSavePath, aSetting)
+	-- 指定ファイルをプレビューで開く
+	tell application "Preview" to open (dataPath of aSetting)
+	
+	tell application "System Events"
+		tell process "Preview"
+			set frontmost to true
+			keystroke "p" using {command down}
+		end tell
+	end tell
+	my subfunc(aSetting)
+	
+	-- プレビューを閉じる
+	tell application "Preview" to close document 1
+	tell application "Preview" to quit
+	
+	-- プレビューに表示された結果レイアウトを保存
+	delay 5
+	tell application "Preview"
+		set aName to (tag of aSetting) & ".pdf"
+		if aName is "" then tell document 1 to set aName to name
+		set newPath to aSavePath & "/" & aName
+		--display dialog newPath
+		save document 1 in POSIX file newPath
+		close document 1
+	end tell
+
+	return true
+end PrintToSimAndSave
+
+on run argv
+	set aSavePath to (path to documents folder)'s POSIX path & "hogehogetest"
+	-- display dialog aSavePath
+	do shell script "mkdir -p " & aSavePath
+	
+	-- 設定値
+	set aSetting to {tag:"", dataPath:"", printer:"", psize:"", ori:"P", staple:"", punch:"false"}
+	if (count of argv) = 0 then
+		copy "/Users/test/Documents/share/s_A4_P_1p.pdf" to dataPath of aSetting
+		copy "Simulated Color Laser @ MBA" to printer of aSetting
+		copy "A4" to psize of aSetting
+		copy "P" to ori of aSetting
+		copy "1 Staple" to staple of aSetting
+		copy "ON" to punch of aSetting
+	else
+		copy (item 1 of argv) to tag of aSetting
+		copy (item 2 of argv) to dataPath of aSetting
+		copy (item 3 of argv) to printer of aSetting
+		copy (item 4 of argv) to psize of aSetting
+		copy (item 5 of argv) to ori of aSetting
+		copy (item 6 of argv) to staple of aSetting
+		copy (item 7 of argv) to punch of aSetting
+		log aSetting
+	end if
+	
+	set ret to my PrintToSimAndSave(aSavePath, aSetting)
+	return ret
+end run

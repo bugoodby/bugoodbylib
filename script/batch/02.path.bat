@@ -1,4 +1,5 @@
 @echo off
+set BATCHDIR=%~dp0
 
 if "%1"=="" (
 	echo ファイルを指定してください
@@ -17,8 +18,10 @@ echo remove \    : %BATCHDIR:~0,-1%
 
 echo =====================
 echo %%cd%%        : %cd%
-%~d0 && cd %~dp0
+rem %~d0 && cd %~dp0
+pushd %~dp0
 echo %%cd%% (after): %cd%
+popd
 
 echo =====================
 echo original    : %1

@@ -1,0 +1,20 @@
+on run argv
+	tell application "AddPrinter" to activate
+	tell application "System Events"
+		tell process "AddPrinter"
+			activate
+			set frontmost to true
+			tell window 1
+				click UI element "IP" of toolbar 1
+				-- set value of text field 1 of group 1 of group 1 to "127.0.0.1"
+				keystroke tab
+				keystroke "127.0.0.1"
+				-- log (enabled of button "追加") as string
+				repeat until (enabled of button "追加" is true)
+					delay 0.5
+				end repeat
+				click button "追加"
+			end tell
+		end tell
+	end tell
+end run

@@ -21,8 +21,7 @@ end
 
 
 def usage
-	prog = __FILE__
-	puts "Usage: #{prog} file"
+	puts "usage: #{File.basename($0)} <file>"
 end
 
 if ARGV.length == 0

@@ -1,5 +1,4 @@
 @echo off
-
 set BATCHDIR=%~dp0
 
 rem -------------------------------

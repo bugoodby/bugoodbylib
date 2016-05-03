@@ -1,0 +1,28 @@
+common:
+  target: target1
+  name: hoge hoge
+scenario:
+  -
+    tag:     A4_P_staple1_punchON
+    data:    s_A4_P_2p.pdf
+    size:    A4
+    ori:     P
+    staple:  1 箇所
+    punch:   ON
+  -
+    tag:     A4_L_staple1_punchON
+    data:    s_A4_L_2p.pdf
+    size:    A4
+    ori:     L
+    staple:  1 箇所
+    punch:   ON
+  -
+    tag:     A4_P_staple2_punchOFF
+    data:    s_A4_P_2p.pdf
+    size:    A4
+    ori:     P
+    staple:  2 箇所
+    punch:   OFF
+
+
+

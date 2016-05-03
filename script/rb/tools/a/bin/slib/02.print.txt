@@ -1,34 +1,25 @@
 on subfunc(aSetting)
 	tell application "System Events"
 		tell sheet 1 of window 1 of process "Preview"
-			-- プリンタ
 			click menu item (printer of aSetting) of menu 1 of (click pop up button 1)
 			delay 0.5
 			
-			-- 用紙サイズ
 			click menu item (psize of aSetting) of menu 1 of (click pop up button 3)
 			
-			-- 方向
 			if (ori of aSetting) is "L" then
 				click radio button 2 of radio group 2
 			end if
 			
-			-- 印刷設定
 			click menu item "Finishing Options" of menu 1 of (click pop up button 4)
 			delay 0.5
 			
-			-- 仕上げオプション
-			--- ステープル
 			click menu item (staple of aSetting) of menu 1 of (click pop up button 5)
 			
-			--- パンチ
 			if (punch of aSetting) is "ON" then
 				tell checkbox "Punch" to if not (its value as boolean) then click
 			end if
 			
-			--- 排紙トレイ
 			--click menu item "上" of menu 1 of (click pop up button 6)
-			--- 折りたたむ
 			--click menu item "レター" of menu 1 of (click pop up button 7)
 			
 			click button "Print"
@@ -37,7 +28,6 @@ on subfunc(aSetting)
 end subfunc
 
 on PrintToSimAndSave(aSavePath, aSetting)
-	-- 指定ファイルをプレビューで開く
 	tell application "Preview" to open (dataPath of aSetting)
 	
 	tell application "System Events"
@@ -48,11 +38,9 @@ on PrintToSimAndSave(aSavePath, aSetting)
 	end tell
 	my subfunc(aSetting)
 	
-	-- プレビューを閉じる
 	tell application "Preview" to close document 1
 	tell application "Preview" to quit
 	
-	-- プレビューに表示された結果レイアウトを保存
 	delay 5
 	tell application "Preview"
 		set aName to (tag of aSetting) & ".pdf"

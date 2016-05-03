@@ -1,0 +1,23 @@
+
+logpath = GET_CUR_DIR + "\..\result.log"
+fid = FOPEN(logpath, F_WRITE)
+if fid = -1 then
+	print "cannot open log file."
+endif
+
+wid = GETID("Canon iPR C700/800 LIPSLXのプロパティ")
+if wid <> -1 then
+	x1 = STATUS(wid, ST_CLX)
+	y1 = STATUS(wid, ST_CLY)
+	x2 = x1 + STATUS(wid, ST_CLWIDTH)
+	y2 = y1 + STATUS(wid, ST_CLHEIGHT)
+	FPUT(fid, "座標：(" + x1 + "," + y1 + "), (" + x2 + "," + y2 + ")")
+	ACW(wid)
+	ifb CHKIMG(PARAM_STR[0], -1, x1, y1, x2, y2)
+		BTN(LEFT, CLICK, G_IMG_X+5, G_IMG_Y+5)
+	endif
+endif
+
+
+FCLOSE(fid)
+

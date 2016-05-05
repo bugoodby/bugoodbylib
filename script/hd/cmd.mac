@@ -1,0 +1,2 @@
+run "cmd.exe /k cd \"" + directory + "\"";
+

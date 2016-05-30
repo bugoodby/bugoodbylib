@@ -1,0 +1,23 @@
+//
+// カーソル下のコントロールの情報をふきだし表示（詳細）
+//
+STOPFORM(TRUE)
+
+While True
+	id = GETID(GET_FROMPOINT_OBJ)
+	str = ""
+	str = str + "  ID          : " + id + "<#CR>"
+	str = str + "  ST_TITLE    : " + STATUS(id, ST_TITLE) + "<#CR>"
+	str = str + "  ST_CLASS    : " + STATUS(id, ST_CLASS) + "<#CR>"
+	str = str + "  ST_X, ST_Y  : " + STATUS(id, ST_X) + ", " + STATUS(id, ST_Y) + "<#CR>"
+	str = str + "  ST_WIDTH    : " + STATUS(id, ST_WIDTH) + "<#CR>"
+	str = str + "  ST_HEIGHT   : " + STATUS(id, ST_HEIGHT) + "<#CR>"
+	str = str + "  ST_CLX, ST_CLY : " + STATUS(id, ST_CLX) + ", " + STATUS(id, ST_CLY) + "<#CR>"
+	str = str + "  ST_CLWIDTH  : " + STATUS(id, ST_CLWIDTH) + "<#CR>"
+	str = str + "  ST_CLHEIGHT : " + STATUS(id, ST_CLHEIGHT) + "<#CR>"
+	str = str + "  ST_PARENT   : " + STATUS(id, ST_PARENT) + "<#CR>"
+	
+	x = G_MOUSE_X;  y = G_MOUSE_Y
+	Fukidasi(str, x + 10, y + 10, 3)
+	Sleep(0.5)
+Wend

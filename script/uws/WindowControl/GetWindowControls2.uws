@@ -13,7 +13,7 @@ While 1
 		wname = STATUS(wid, ST_TITLE)
 		
 		//----------------------------------------------
-		fp = FOPEN("GetWindowInfo2-" + seq + ".txt", F_WRITE)
+		fp = FOPEN("result_GetWindowInfo2-" + seq + ".txt", F_WRITE)
 		
 		OutputWindowInfoFromID(fp, wid)
 		OutputControlsAutoJudge(fp, wid, ITM_BTN, "ITM_BTN")
@@ -30,9 +30,10 @@ While 1
 		//OutputControlsAutoJudge(fp, wid, ITM_ACCTXT, "ITM_ACCTXT")
 
 		FCLOSE(fp)
+		LOGPRINT(false)
 		
 		//----------------------------------------------
-		fp = FOPEN("GetWindowInfo2-" + seq + "-raw.txt", F_WRITE)
+		fp = FOPEN("result_GetWindowInfo2-" + seq + "-raw.txt", F_WRITE)
 		
 		OutputWindowInfoFromID(fp, wid)
 		OutputControls(fp, wid, ITM_BTN, "ITM_BTN")
@@ -82,6 +83,7 @@ FUNCTION OutputWindowInfoFromID( fp, id )
 FEND
 
 FUNCTION OutputControlsAutoJudge( fp, id, type, typestr )
+	PRINT "getting... " + typestr
 	GetItem(id, type, -1)
 	
 	itemNum = GetItem(id, type, -1)

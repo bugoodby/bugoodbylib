@@ -1,0 +1,95 @@
+//====================================================================
+// 現在のファイルでgrepする
+//
+//====================================================================
+setcompatiblemode 0x20000;
+
+loaddll hidemarudir + "\\DengakuDLL.dll";
+if (!result) {
+	message "DengakuDLLをロードできませんでした。";
+	endmacro;
+}
+
+//iniファイル読み込み
+#hwnd = hidemaruhandle( 0 );
+openfile "/m5 " + currentmacrodirectory + "\\occurPreset.ini";
+#hwnd_ini = hidemaruhandle( 0 );
+disabledraw;
+gofiletop;
+#i = 0;
+while ( code != eof ){
+	#l = lineno;
+	$str = gettext(0, #l-1, 1000, #l-1);
+	if ( leftstr($str, 1) != "" && leftstr($str, 1) != ";" ) {
+	    $presetList[#i] = $str;
+		#i = #i + 1;
+	}
+	golineend;
+	right;
+}
+enabledraw;
+setactivehidemaru #hwnd;
+closehidemaru #hwnd_ini;
+
+//ダイアログ作成
+if (dllfunc("NEWDIALOG", "検索キーワードの選択", 80) == 0 ||
+	dllfunc("NEWCONTROL","list","list1","") == 0) {
+	message "ダイアログ作成に失敗しました。";
+	endmacro;
+}
+#i = 0;
+while ($presetList[#i] != "") {
+	if (dllfunc("SETCTRLITEM", "", $presetList[#i], "-1") == 0) {
+		message "ダイアログ作成に失敗しました。";
+		endmacro;
+	}
+	#i = #i + 1;
+}
+if (dllfunc("SETCTRLSTATE","","1","") == 0 ||
+	dllfunc("NEWCONTROL", "button", "btn1", "設定ファイルを開く") == 0 ||
+	dllfunc("SETCTRLWIDTH","", 20) == 0 ||
+	dllfunc("SETCTRLNOTIFY","","10") == 0 ||
+	dllfunc("NEWCONTROL","okcancel","","") == 0 ||
+	dllfunc("SHOWDIALOG", hidemaruhandle(0), 1) == 0) {
+	message "ダイアログ作成に失敗しました。";
+	endmacro;
+}
+
+$name = "";
+while (1) {
+	while ( strlen($name) == 0 ) {
+		$name = dllfuncstr("WAITCTRLNOTIFY", 10);
+	}
+	if ( $name == "0" || $name == "1" || $name == "10" ) {
+		break;
+	}
+}
+if (!dllfunc("ENDDIALOG")) {
+	message "ダイアログ終了に失敗しました。";
+	endmacro;
+}
+
+if ( $name == "1" ) {
+	$str = dllfuncstr("GETCTRLSTRING","list1");
+	$keywordcand = "";
+	#i = 0;
+	while ( #i < strlen($str) ) {
+		if ( midstr($str, #i, 1) == "=" ) {
+			$keywordcand = midstr($str, #i + 1);
+			break;
+		}
+		#i = #i + 1;
+	}
+	$keyword = input("検索文字列を入力", $keywordcand);
+	if ( strlen($keyword) > 0 ) {
+		localgrep $keyword, regular;
+	}
+}
+else if ( $name == "10" ) {
+	openfile "/m3 " + currentmacrodirectory + "\\occurPreset.ini";
+}
+
+endmacro;
+
+
+

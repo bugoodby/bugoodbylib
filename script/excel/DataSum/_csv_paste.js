@@ -35,10 +35,12 @@ function ExecScript( filespec )
 	objExcel.Visible = true;
 	objExcel.DisplayAlerts = false;
 	
-	
 	// 結果ファイルのdataシートを選択
 	var objOutBook = objExcel.Workbooks.Open(outPath);
 	var objOutSheet = objOutBook.WorkSheets("data");
+	
+	// 数式の再計算を停止
+	//objExcel.Calculation = -4135; //xlCalculationManual
 	
 	// csvを読み取り専用で開く
 	var objCsvBook = objExcel.Workbooks.Open(csvPath, null, true);

@@ -1,0 +1,18 @@
+//GET_CUR_DIRŽæ“¾
+
+msg = ""
+msg = msg + "GET_CUR_DIR = " + GET_CUR_DIR + "<#CR>"
+msg = msg + "GET_WIN_DIR = " + GET_WIN_DIR + "<#CR>"
+msg = msg + "GET_SYS_DIR = " + GET_SYS_DIR + "<#CR>"
+msg = msg + "GET_APPDATA_DIR = " + GET_APPDATA_DIR + "<#CR>"
+msg = msg + "GET_UWSC_DIR = " + GET_UWSC_DIR + "<#CR>"
+msg = msg + "--------------<#CR>"
+msg = msg + "G_SCREEN_W = " + G_SCREEN_W + "<#CR>"
+msg = msg + "G_SCREEN_H = " + G_SCREEN_H + "<#CR>"
+msg = msg + "G_SCREEN_C = " + G_SCREEN_C + "<#CR>"
+msg = msg + "--------------<#CR>"
+msg = msg + "G_MOUSE_X = " + G_MOUSE_X + "<#CR>"
+msg = msg + "G_MOUSE_Y = " + G_MOUSE_Y + "<#CR>"
+
+MSGBOX(msg)
+

@@ -9,6 +9,6 @@ While True
 	str = cid + " : " + STATUS(cid, ST_TITLE) + " ("+ STATUS(cid, ST_X) + ", " + STATUS(cid, ST_Y) + ")"
 	
 	x = G_MOUSE_X;  y = G_MOUSE_Y
-	Fukidasi(str, x, y, 3)
+	Fukidasi(str, x + 10, y + 10, 3)
 	Sleep(0.5)
 Wend

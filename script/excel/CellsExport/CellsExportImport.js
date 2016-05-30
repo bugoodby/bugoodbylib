@@ -13,17 +13,23 @@ main( WScript.Arguments.Count(), WScript.Arguments );
 
 function main( argc, argv ) 
 {
-	if ( argc != 1 ) {
+	if ( argc != 3 ) {
 		WScript.Echo("à¯êîÇ™ïsê≥Ç≈Ç∑");
 		return 1;
 	}
 	
-	var ext = fso.GetExtensionName(argv(0));
-	if ( ext == "txt" ) {
-		var excel_path = WScript.ScriptFullName.replace(WScript.ScriptName, "base.xlsm");
-		Import(argv(0), excel_path);
-	} else {
-		Export(argv(0));
+	LOG(argv(0));
+	LOG(argv(1));
+	LOG(argv(2));
+	
+	if ( argv(0) == "/import" ) {
+		Import(argv(1), argv(2));
+	}
+	else if ( argv(0) == "/export" ) {
+		Export(argv(1), argv(2));
+	}
+	else {
+		LOG("Usage: CellsExportImport.js <mode> <data_file> <excel_file>\n");
 	}
 }
 

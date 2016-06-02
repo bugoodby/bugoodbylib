@@ -15,7 +15,7 @@ $data_root = $root + '/data'
 $result_root = $root + '/result'
 
 
-class BinaryGenerator
+class Generator
 	def initialize( opt = {} )
 		@bin_save_dir = $data_root + '/binary/' + Time.now.strftime("%Y%m%d_%H%M%S")
 		FileUtils.mkdir_p(@bin_save_dir)
@@ -49,27 +49,7 @@ class BinaryGenerator
 	end
 end
 
-class BinaryGeneratorLocalTest < BinaryGenerator
-	def initialize( opt = {} )
-		super(opt)
-	end
-	
-	def executeJob( send_data )
-		puts "stub: executeJob()..."
-		p send_data
-		sleep(1)
-	end
-
-	def collectResult( scenario )
-		path = @bin_save_dir + '/' + scenario['tag'] + '.dat'
-		File.open(path,"w") do |f|
-			f.puts "test"
-		end
-	end
-end
-
-
-class BinarySender
+class Sender
 	def initialize( opt = {} )
 		@bin_save_dir = opt[:bindir]
 		@result_dir = $result_root + '/' + Time.now.strftime("%Y%m%d_%H%M%S")
@@ -99,11 +79,11 @@ end
 
 case ARGV[0]
 when '1'
-	binGenerator = BinaryGeneratorLocalTest.new()
+	binGenerator = Generator.new()
 	binGenerator.executeTest()
 when '2'
 	opt = { :bindir => $data_root + '/binary/20160502_203526' }
-	binSender = BinarySender.new(opt)
+	binSender = Sender.new(opt)
 	binSender.executeTest()
 else
 	puts "?????"

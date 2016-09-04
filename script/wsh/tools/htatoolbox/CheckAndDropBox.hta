@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Style-Type" content="text/css" /> 
+	<meta http-equiv="Content-Script-Type" content="text/javascript" /> 
+	<meta http-equiv="Content-Type" content="text/html; charset=shift_jis" /> 
+	<title>template</title> 
+	<style>
+html,body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	background-color: #e0e0e0;
+	font: normal 12px "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+}
+#wrapper {
+	text-align: left;
+	margin: 0 auto 0;
+	width: 95%;
+	background-color: #ffffff;
+}
+#contents {
+	position: relative;
+	padding: 20px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 10px solid #e0e0e0;
+	border-bottom: 10px solid #e0e0e0;
+}
+select.solid {
+	padding: 2px;
+	border: 1px solid #b8b8b8;
+}
+input.solid {
+	padding: 2px;
+	border: 1px solid #b8b8b8;
+	width: 6em;
+}
+input.blue {
+	padding: 4px 10px;
+	background-color: #248;
+	color: #ffffff;
+	border-style: none;
+}
+input.blue:hover {
+    background-color: #24d;
+}
+	</style>
+	<script type="text/javascript">
+<!--
+window.resizeTo(750, 600);    //  ウィンドウサイズ設定
+//window.moveTo(50, 50);      //  ウィンドウ移動
+
+var fso = new ActiveXObject("Scripting.FileSystemObject");
+
+var select1Tbl = {
+	"aaa": 1,
+	"bbb": 4,
+	"ccc": 6
+};
+
+var select2Tbl = {
+	"hoge": 100,
+	"fuga": 333,
+	"piyo": 999
+};
+
+window.onload = function() 
+{
+	var select1Ary = document.getElementsByName("select1");
+	for ( var i = 0; i < select1Ary.length; i++ ) {
+		for ( var key in select1Tbl ) {
+			select1Ary[i].options.add( new Option(key) );
+		}
+	}
+	
+	var select2Ary = document.getElementsByName("select2");
+	for ( var i = 0; i < select2Ary.length; i++ ) {
+		for ( var key in select2Tbl ) {
+			select2Ary[i].options.add( new Option(key) );
+		}
+	}
+}
+
+
+function onClickExec()
+{
+	var select1Ary = document.getElementsByName("select1");
+	var select2Ary = document.getElementsByName("select2");
+	var text1Ary = document.getElementsByName("text1");
+	var text2Ary = document.getElementsByName("text2");
+	
+	var outfile = fso.GetFolder(".").Path + "\\sample.txt";
+	var ws = fso.OpenTextFile(outfile, 2/*ForWriting*/, true, 0);
+	
+	var useAry = document.getElementsByName("use");
+	for ( var i = 0; i < useAry.length; i++ ) {
+		if ( useAry[i].checked ) {
+			ws.WriteLine("***" + i + "***");
+			
+			var sel1 = select1Ary[i];
+			var sel1Value = sel1.options[sel1.selectedIndex].text;
+			var sel2 = select2Ary[i];
+			var sel2Value = sel2.options[sel2.selectedIndex].text;
+			var t1 = text1Ary[i].value;
+			var t2 = text2Ary[i].value;
+			
+			ws.WriteLine("  select1: " + sel1Value + " (" + select1Tbl[sel1Value] + ")");
+			ws.WriteLine("  select2: " + sel2Value + " (" + select2Tbl[sel2Value] + ")");
+			ws.WriteLine("  t1: " + t1);
+			ws.WriteLine("  t2: " + t2);
+		}
+	}
+	
+	ws.close();
+}
+
+function onClickClear()
+{
+	var useAry = document.getElementsByName("use");
+	for ( var i = 0; i < useAry.length; i++ ) {
+		useAry[i].checked = false;
+	}
+}
+-->
+	</script>
+	<hta:application innerBorder="no" scroll="no"></hta:application>
+</head>
+<body>
+ 	<div id="wrapper"> 
+		<div id="contents">
+			<p>
+				<input type="checkbox" name="use" checked>
+				設定１：<select name="select1"></select>
+				<input type="text" class="solid" name="text1" value="">
+				<input type="text" class="solid" name="text2" value="">
+				設定２：<select name="select2"></select>
+			</p>
+			<p>
+				<input type="checkbox" name="use" checked>
+				設定１：<select name="select1"></select>
+				<input type="text" class="solid" name="text1" value="">
+				<input type="text" class="solid" name="text2" value="">
+				設定２：<select name="select2"></select>
+			</p>
+			<p>
+				<input type="checkbox" name="use" checked>
+				設定１：<select name="select1"></select>
+				<input type="text" class="solid" name="text1" value="">
+				<input type="text" class="solid" name="text2" value="">
+				設定２：<select name="select2"></select>
+			</p>
+			<br><br>
+			<input type="button" class="blue" name="exec" value="exec" onclick="onClickExec()">
+			<input type="button" class="blue" name="clear" value="clear" onclick="onClickClear()">
+		</div>
+	</div>
+</body>
+</html>

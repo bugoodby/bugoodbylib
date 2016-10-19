@@ -34,10 +34,6 @@ body {
 	border-top: 10px solid #e0e0e0;
 	border-bottom: 10px solid #e0e0e0;
 }
-select.solid {
-	padding: 2px;
-	border: 1px solid #b8b8b8;
-}
 input.solid {
 	padding: 2px;
 	border: 1px solid #b8b8b8;
@@ -89,6 +85,22 @@ window.onload = function()
 	}
 }
 
+function onChangeSelect1( index )
+{
+	var select1Ary = document.getElementsByName("select1");
+	var sel1 = select1Ary[index];
+	var sel1Value = sel1.options[sel1.selectedIndex].text;
+	
+	var flag = true;
+	if ( sel1Value === "ccc" ) {
+		flag = false;
+	}
+	
+	var text1Ary = document.getElementsByName("text1");
+	text1Ary[index].disabled = flag;
+	var text2Ary = document.getElementsByName("text2");
+	text2Ary[index].disabled = flag;
+}
 
 function onClickExec()
 {
@@ -128,6 +140,14 @@ function onClickClear()
 	for ( var i = 0; i < useAry.length; i++ ) {
 		useAry[i].checked = false;
 	}
+	var select1Ary = document.getElementsByName("select1");
+	for ( var i = 0; i < select1Ary.length; i++ ) {
+		select1Ary[i].selectedIndex = 0;
+	}
+	var select2Ary = document.getElementsByName("select2");
+	for ( var i = 0; i < select2Ary.length; i++ ) {
+		select2Ary[i].selectedIndex = 0;
+	}
 }
 -->
 	</script>
@@ -138,23 +158,23 @@ function onClickClear()
 		<div id="contents">
 			<p>
 				<input type="checkbox" name="use" checked>
-				ê›íËÇPÅF<select name="select1"></select>
-				<input type="text" class="solid" name="text1" value="">
-				<input type="text" class="solid" name="text2" value="">
+				ê›íËÇPÅF<select name="select1" onChange="onChangeSelect1(0)"></select>
+				<input type="text" class="solid" name="text1" value="" disabled>
+				<input type="text" class="solid" name="text2" value="" disabled>
 				ê›íËÇQÅF<select name="select2"></select>
 			</p>
 			<p>
 				<input type="checkbox" name="use" checked>
-				ê›íËÇPÅF<select name="select1"></select>
-				<input type="text" class="solid" name="text1" value="">
-				<input type="text" class="solid" name="text2" value="">
+				ê›íËÇPÅF<select name="select1" onChange="onChangeSelect1(1)"></select>
+				<input type="text" class="solid" name="text1" value="" disabled>
+				<input type="text" class="solid" name="text2" value="" disabled>
 				ê›íËÇQÅF<select name="select2"></select>
 			</p>
 			<p>
 				<input type="checkbox" name="use" checked>
-				ê›íËÇPÅF<select name="select1"></select>
-				<input type="text" class="solid" name="text1" value="">
-				<input type="text" class="solid" name="text2" value="">
+				ê›íËÇPÅF<select name="select1" onChange="onChangeSelect1(2)"></select>
+				<input type="text" class="solid" name="text1" value="" disabled>
+				<input type="text" class="solid" name="text2" value="" disabled>
 				ê›íËÇQÅF<select name="select2"></select>
 			</p>
 			<br><br>

@@ -1,5 +1,6 @@
 #!/bin/ruby
 require "date"
+require_relative "02.path/02.pathlib.rb"
 
 #-----------------------------------------------------------
 # main
@@ -17,6 +18,9 @@ def main()
 	puts "  ScriptDirFile: " << File.dirname(File.expand_path($0)) << "/xxx.txt" << "\n"
 	puts "  ScriptDirFile: " << File.join( File.dirname(File.expand_path($0)), "xxx.txt") << "\n"
 	puts "\n"
+	
+	# require先のスクリプトでどうなるか
+	subfunc()
 	
 	#引数で指定されたファイルのパス
 	if ( ARGV.length > 0 )

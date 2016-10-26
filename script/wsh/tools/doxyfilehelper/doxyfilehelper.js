@@ -3,7 +3,7 @@
 //   doxyfileÇê∂ê¨Çµê›íËÇïœçXÇ∑ÇÈ
 //--------------------------------------------------------------
 var DOXY_PATH = "C:\\Program Files\\doxygen\\bin\\doxygen.exe"
-var DOT_PATH = "C:\\Program Files (x86)\\Graphviz 2.34\\bin";
+var DOT_PATH = "C:\\Program Files (x86)\\Graphviz2.38\\bin";
 
 
 WScript.Quit(main( WScript.Arguments.Count(), WScript.Arguments ));
@@ -51,7 +51,7 @@ function ExecScript( target )
 	//--------------------------------------------
 	// modify doxyfile
 	//--------------------------------------------
-	var outfile = configFile + "_" + prjName;
+	var outfile = configFile + "_" + prjName + ".conf";
 	
 	var rs = fso.OpenTextFile( configFile, 1/*ForReading*/, false, 0 );
 	var ws = fso.OpenTextFile( outfile, 2/*ForWriting*/, true, 0 );
@@ -66,7 +66,7 @@ function ExecScript( target )
 			ws.WriteLine(RegExp.$1 + " YES");
 		}
 		else if ( line.match(/^(OUTPUT_LANGUAGE\s*=)/) ) {
-			ws.WriteLine(RegExp.$1 + " Japanese");
+			ws.WriteLine(RegExp.$1 + " English");
 		}
 		else if ( line.match(/^(TYPEDEF_HIDES_STRUCT\s*=)/) ) {
 			ws.WriteLine(RegExp.$1 + " YES");

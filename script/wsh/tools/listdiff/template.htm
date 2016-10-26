@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Type" content="text/html; charset=shift_jis" />
+	<title>pplanalysis</title>
+</head>
+<style>
+table,tr,td,th {
+	border:1px solid #888888;
+	border-collapse:collapse;
+}
+</style>
+<script>
+function isearch(pattern) {
+	try {
+		var regex = new RegExp(pattern, "i");
+		var trs = document.getElementsByTagName('tr');
+		var len1 = trs.length;
+		for (var i = 0; i < len1; i++) {
+			var e = trs[i];
+			if (e.className == "pkg") {
+				var tds = e.getElementsByTagName("td");
+				var len2 = tds.length;
+				for (var j = 0; j < len2; j++) {
+					if ( tds[j].className == "pn" ) {
+						if (tds[j].innerText.match(regex)) {
+							e.style.display = "";
+						} else {
+							e.style.display = "none";
+						}
+					}
+				}
+			}
+		}
+	} catch (e) {
+		//nop
+	}
+}
+</script>
+<body>
+<div><input type="text" name="pattern" onkeyup="isearch(this.value)"></div>
+<!-- CONTENTS -->
+</body>
+</html>

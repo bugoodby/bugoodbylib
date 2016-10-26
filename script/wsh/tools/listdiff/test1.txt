@@ -1,0 +1,5 @@
+abc-PKG-GCC4-1.0.0-102201011234.rpm
+apple_orange-PKG-GCC4-3.56.3-0.rpm
+doraemon-nobita-PKG-GCC4-1.2.5-331485194.rpm
+graduate-nobita-PKG-GCC4-0.0.100-0.rpm
+hogehoge-PKG-GCC4-1.0.0-0.rpm

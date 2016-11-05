@@ -1,4 +1,5 @@
 [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+[System.Windows.Forms.Application]::EnableVisualStyles()
 
 $diffApp = "D:\\documents\\WinMergeU.exe"
 

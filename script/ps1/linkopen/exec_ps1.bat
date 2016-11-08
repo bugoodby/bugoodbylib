@@ -2,6 +2,6 @@
 
 set BATCHDIR=%~dp0
 
-powershell -ExecutionPolicy RemoteSigned "%1"
+powershell -ExecutionPolicy RemoteSigned -STA "%1"
 
 pause

@@ -39,5 +39,5 @@ if ($args.length -eq 0) {
 	exit 0
 }
 
-dumpbin($args[0])
+dumpbin $args[0]
 

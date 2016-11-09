@@ -2,5 +2,7 @@
 
 set BATCHDIR=%~dp0
 
-call powershell -ExecutionPolicy RemoteSigned -STA -WindowStyle Hidden "%BATCHDIR%\startprocess.ps1"
+rem powershell -ExecutionPolicy RemoteSigned -STA -WindowStyle Hidden "%BATCHDIR%\startprocess.ps1"
+powershell -ExecutionPolicy RemoteSigned -STA "%BATCHDIR%\startprocess.ps1"
 
+pause

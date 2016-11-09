@@ -1,6 +1,34 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
 
+function Load-Ini( $Path )
+{
+	$inidata = @{}
+	if ( Test-Path $Path ) {
+		$lines = Get-Content $Path
+		foreach ( $l in $lines ) {
+			if ( $l -match "^;"){ continue }
+			$p = $l.split("=", 2)
+			if ( $p.length -eq 2 ) { $inidata.Add($p[0].Trim(), $p[1].Trim()) }
+		}
+	}
+	return $inidata
+}
+function Save-Ini( $Path, $IniData )
+{
+	$text = ""
+	foreach ( $k in $IniData.Keys ) {
+		$text += ( "$k=" + $IniData[$k] + "`n" )
+	}
+	[IO.File]::WriteAllText($Path, $text)
+}
+
+$basedir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + "\\"
+$ini = Load-Ini -Path ($basedir + "config.ini")
+if ( -not $ini["width"] ) { $ini.Add("width", 500) }
+if ( -not $ini["height"] ) { $ini.Add("height", 150) }
+
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -8,8 +36,10 @@ Add-Type -AssemblyName System.Drawing
 # フォーム
 $form = New-Object System.Windows.Forms.Form 
 $form.Text = "StartProcess"
-$form.Size = New-Object System.Drawing.Size(500,150)
-$form.StartPosition = "WindowsDefaultLocation"
+$form.Size = New-Object System.Drawing.Size($ini["width"], $ini["height"])
+#$form.StartPosition = "WindowsDefaultLocation"
+$form.StartPosition = "Manual"
+$form.Location = New-Object System.Drawing.Point($ini["posx"], $ini["posy"])
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
 
 # ラベル
@@ -70,3 +100,9 @@ $form.Add_DragDrop({
 })
 
 $form.ShowDialog()
+
+$ini["posx"] = $form.Left
+$ini["posy"] = $form.Top
+$ini["width"] = $form.Width
+$ini["height"] = $form.Height
+Save-Ini -Path ($basedir + "config.ini") -IniData $ini

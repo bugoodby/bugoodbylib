@@ -1,6 +1,11 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
 
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+[System.Windows.Forms.Application]::EnableVisualStyles()
+
+
 function Load-Ini( $Path )
 {
 	$inidata = @{}
@@ -28,10 +33,6 @@ $ini = Load-Ini -Path ($basedir + "config.ini")
 if ( -not $ini["width"] ) { $ini.Add("width", 500) }
 if ( -not $ini["height"] ) { $ini.Add("height", 150) }
 
-
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName System.Drawing
-[System.Windows.Forms.Application]::EnableVisualStyles()
 
 # ÉtÉHÅ[ÉÄ
 $form = New-Object System.Windows.Forms.Form 

@@ -44,6 +44,7 @@ $form.Controls.Add($textBox)
 $form.AllowDrop = $true
 $form.Add_DragEnter({$_.Effect = 'Copy'})
 $form.Add_DragDrop({
+	$form.Cursor = "WaitCursor"
 	$textBox.Text = ""
 	foreach ( $fileName in $_.Data.GetData("FileDrop") ) {
 		$textBox.Text += "<<<$fileName>>>`r`n"
@@ -54,6 +55,7 @@ $form.Add_DragDrop({
 		# ƒtƒ‹ƒpƒX
 		$files | %{ $textBox.Text += [String]::Format("{0}`r`n", $_.FullName) }
 	}
+	$form.Cursor = "Default"
 })
 
 

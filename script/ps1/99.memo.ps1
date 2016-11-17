@@ -10,6 +10,11 @@ $PSVersionTable.GetType()
 $PSVersionTable
 
 "======================="
+" Get-ExecutionPolicy"
+"======================="
+Get-ExecutionPolicy
+
+"======================="
 " Host"
 "======================="
 $Host.GetType()

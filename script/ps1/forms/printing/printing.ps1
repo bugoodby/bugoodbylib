@@ -15,9 +15,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Printing;
+using System.Runtime.InteropServices;
 
 public static class MyClass
 {
+	[DllImport("shell32.dll")]
+	static extern int SHInvokePrinterCommand(IntPtr hwnd, uint uAction, string lpBuf1, string lpBuf2, int fModal);
+	const uint PRINTACTION_OPEN = 0;
+
 	public static int lpr(string strIP, string strFile)
 	{
 		ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -88,6 +93,11 @@ public static class MyClass
 		string defaultPrinter = pd.PrinterSettings.PrinterName;
 		return defaultPrinter;
 	}
+	public static void OpenSpooler( string prnName )
+	{
+		IntPtr hwnd = Process.GetCurrentProcess().MainWindowHandle;
+		SHInvokePrinterCommand(hwnd, PRINTACTION_OPEN, prnName, null, 1);
+	}
 }
 '@
 
@@ -146,6 +156,7 @@ $button.Location = New-Object System.Drawing.Point(10,($listView.Bottom+10))
 $button.Size = New-Object System.Drawing.Size(75,30)
 $button.Text = "OK"
 $button.Add_Click({
+	[MyClass]::OpenSpooler($combo.Text)
 	foreach ( $item in $listView.Items ) {
 		if ( $item.Selected ) {
 			[MyClass]::print($combo.Text, $item.SubItems[0].Text)

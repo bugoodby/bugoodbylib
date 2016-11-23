@@ -20,9 +20,9 @@ function Save-Ini( $Path, $IniData )
 {
 	$text = ""
 	foreach ( $k in $IniData.Keys ) {
-		$text += ( "$k=" + $IniData[$k] + "`n" )
+		$text += ( "$k=" + $IniData[$k] + "`r`n" )
 	}
-	[IO.File]::WriteAllText($Path, $text)
+	[IO.File]::WriteAllText($Path, $text, [Text.Encoding]::GetEncoding("Shift_JIS"))
 }
 
 #load

@@ -7,7 +7,7 @@ Add-Type -AssemblyName System.Drawing
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + "\\"
 
-. .\DebugTools.ps1
+. ..\..\DebugTools.ps1
 . .\subfunc.ps1
 
 
@@ -75,7 +75,6 @@ $form.Add_DragDrop({
 	Refresh-TreeView $_.Data.GetData("FileDrop")[0]
 })
 
-refresh-treeview ($scriptdir + "GCP.pcapng")
 $form.Showdialog()
 
 

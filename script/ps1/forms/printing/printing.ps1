@@ -2,6 +2,7 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
+. ..\..\DebugTools.ps1
 
 $assemblies = (
  "System.Windows.Forms",
@@ -150,6 +151,21 @@ $listView.FullRowSelect = $true
 $listView.MultiSelect = $true
 [void]$listView.Columns.Add("Name", 100)
 [void]$listView.Columns.Add("Path", 500)
+
+$contextMenu = New-object System.Windows.Forms.ContextMenuStrip
+$listView.ContextMenuStrip = $contextMenu
+$contextMenu1 = New-Object System.Windows.Forms.ToolStripMenuItem
+$contextMenu1.Text = "menu 1"
+$contextMenu2 = New-Object System.Windows.Forms.ToolStripMenuItem
+$contextMenu2.Text = "menu 2"
+[void]$contextMenu.Items.Add($contextMenu1)
+[void]$contextMenu.Items.Add($contextMenu2)
+$contextMenu.Add_ItemClicked({
+	MsgBox $_.ClickedItem.Text
+})
+$contextMenu.Add_Opening({
+	if ($listView.SelectedItems.Count -le 0) { $_.Cancel = $true; }
+})
 
 $button = New-Object System.Windows.Forms.Button
 $button.Location = New-Object System.Drawing.Point(10,($listView.Bottom+10))

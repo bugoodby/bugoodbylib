@@ -11,7 +11,6 @@ $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + "\\"
 . .\subfunc.ps1
 
 
-# フォーム
 $form = New-Object System.Windows.Forms.Form 
 $form.Text = "pcapview"
 $form.Size = New-Object System.Drawing.Size(800,600)
@@ -20,7 +19,6 @@ $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
 #$form.Font = New-Object System.Drawing.Font("", 9)
 
 
-# ツリー
 $treeView = New-Object System.Windows.Forms.TreeView
 $treeView.Location = New-Object System.Drawing.Point(10, 10)
 $treeView.Size = New-Object System.Drawing.Size(200, 500)
@@ -44,8 +42,6 @@ $contextMenu.Add_Click({
 	MsgBox $treeView.SelectedNode.Text
 })
 
-
-# テキストボックス
 $textBox = New-Object System.Windows.Forms.TextBox
 $textBox.Location = New-Object System.Drawing.Point(($TreeView.Right+10), $TreeView.Top)
 $textBox.Size = New-Object System.Drawing.Size(550, 500)
@@ -60,7 +56,6 @@ $textBox.Font = New-Object System.Drawing.Font("ＭＳ ゴシック", 9)
 $form.Controls.Add($treeView)
 $form.Controls.Add($textBox)
 
-# アンカー
 $asTop = [System.Windows.Forms.AnchorStyles]::Top
 $asBottom = [System.Windows.Forms.AnchorStyles]::Bottom
 $asLeft = [System.Windows.Forms.AnchorStyles]::Left
@@ -68,7 +63,6 @@ $asRight = [System.Windows.Forms.AnchorStyles]::Right
 $treeView.Anchor = $asTop -bor $asBottom -bor $asLeft
 $textBox.Anchor = $asTop -bor $asBottom -bor $asLeft -bor $asRight
 
-# ドラッグ＆ドロップ
 $form.AllowDrop = $true
 $form.Add_DragEnter({$_.Effect = 'Copy'})
 $form.Add_DragDrop({

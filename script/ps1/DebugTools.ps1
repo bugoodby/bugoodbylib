@@ -1,5 +1,35 @@
 Add-Type -AssemblyName System.Windows.Forms
 
+function Load-Ini( $Path )
+{
+	$inidata = @{}
+	if ( Test-Path $Path ) {
+		$lines = Get-Content $Path
+		foreach ( $l in $lines ) {
+			if ( $l -match "^;"){ continue }
+			$p = $l.split("=", 2)
+			if ( $p.length -eq 2 ) { $inidata.Add($p[0].Trim(), $p[1].Trim()) }
+		}
+	}
+	return $inidata
+}
+
+function Save-Ini( $Path, $IniData )
+{
+	$text = ""
+	foreach ( $k in $IniData.Keys ) {
+		$text += ( "$k=" + $IniData[$k] + "`r`n" )
+	}
+	[IO.File]::WriteAllText($Path, $text, [Text.Encoding]::GetEncoding("Shift_JIS"))
+	return
+}
+
+function breakpoint()
+{
+	$host.EnterNestedPrompt()
+	# Get-Variable
+}
+
 function MsgBox( [string]$str )
 {
 	[System.Windows.Forms.MessageBox]::Show($str, "debug")
@@ -47,25 +77,32 @@ function HexDump( [byte[]]$obj )
 	return
 }
 
-function GetType( $obj )
+function ShowObj( $obj )
 {
 	if ($obj -ne $null) {
 		$str = "[FullName]`r`n"
 		$str += ($obj.GetType().FullName + "`r`n")
 		$str += "[BaseType]`r`n"
-		$str += ($obj.GetType().BaseType.FullName + "`r`n")
+		$str += ($obj.GetType().BaseType.FullName + "`r`n`r`n")
+		if ( $obj -is [array] ) {
+			$str += ("[Length: " + $obj.Length + "]`r`n")
+			$obj | %{ $str += ($_.toString() + "`r`n") }
+		} else {
+			$str += $obj.toString()
+		}
 	} else {
 		$str = "null"
 	}
 	$form = New-Object System.Windows.Forms.Form 
 	$form.Size = "400,200"
-	$form.Text = "GetType"
+	$form.Text = "ShowObj"
 	$tb = New-Object System.Windows.Forms.TextBox
 	$tb.Text = $str
 	$tb.MultiLine = $true
 	$tb.ScrollBars = "Both"
+	$tb.ReadOnly = $true
 	$tb.Dock = "Fill"
-	$tb.Font = New-Object System.Drawing.Font("", 9)
+	$tb.Font = New-Object System.Drawing.Font("ÇlÇr ÉSÉVÉbÉN", 9)
 	$form.Controls.Add($tb)
 	[void]$form.ShowDialog()
 	return

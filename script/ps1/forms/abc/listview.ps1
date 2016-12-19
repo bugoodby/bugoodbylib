@@ -1,18 +1,21 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
 
-$ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
-. ..\..\DebugTools.ps1
-
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
+$Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($PSHOME + "\powershell.exe")
+
+$ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
+. ..\..\DebugTools.ps1
+
 
 $form = New-Object System.Windows.Forms.Form 
 $form.Text = "test"
-$form.Size = New-Object System.Drawing.Size(500,350)
+$form.Size = New-Object System.Drawing.Size(500,300)
 $form.StartPosition = "WindowsDefaultLocation"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
+$form.Icon = $Icon
 
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10,10)
@@ -43,7 +46,15 @@ $contextMenu2.Text = "menu 2"
 [void]$contextMenu.Items.Add($contextMenu2)
 $contextMenu.Add_ItemClicked({
 	switch($_.ClickedItem.Text) {
-	"menu 1" { $listView.SelectedItems | % { $listView.Items.Remove($_) } }
+		"menu 1" { $listView.SelectedItems | %{ $listView.Items.Remove($_) } }
+		"menu 2" { $listView.SelectedItems | %{
+			$str = ""
+			for ( $i = 0; $i -lt $listView.Columns.Count; $i++ ) {
+				$str += ("{0}: {1}`r`n" -f $listView.Columns[$i].Text, $_.SubItems[$i].Text)
+			}
+			[System.Windows.Forms.MessageBox]::Show($str, "Title")
+		}
+	}
 	default { }
 	}
 })
@@ -61,12 +72,22 @@ $button.Add_Click({
 
 $form.Controls.AddRange(@($label, $listView, $button))
 
+$asTop = [System.Windows.Forms.AnchorStyles]::Top
+$asBottom = [System.Windows.Forms.AnchorStyles]::Bottom
+$asLeft = [System.Windows.Forms.AnchorStyles]::Left
+$asRight = [System.Windows.Forms.AnchorStyles]::Right
+$listView.Anchor = $asTop -bor $asBottom -bor $asLeft -bor $asRight
+$button.Anchor = $asBottom -bor $asLeft
+
 $AddFiles = {
 	PARAM([string]$path)
 	Get-ChildItem -Recurse $path | ?{ !$_.PSIsContainer } | %{
 		$item = New-Object System.Windows.Forms.ListViewItem($_.Name)
+		$item.UseItemStyleForSubItems = $false
 		[void]$item.SubItems.Add($_.Extension)
-		[void]$item.SubItems.Add($_.Length)
+		$si = $item.SubItems.Add($_.Length)
+		$si.ForeColor = [Drawing.Color]::White
+		$si.BackColor = [Drawing.Color]::Red
 		[void]$item.SubItems.Add($_.LastWriteTime.toString())
 		[void]$item.SubItems.Add($_.FullName)
 		[void]$listView.Items.Add($item)
@@ -84,5 +105,5 @@ $form.Add_DragDrop({
 	$form.Cursor = "Default"
 })
 
-$form.ShowDialog()
+[void]$form.ShowDialog()
 

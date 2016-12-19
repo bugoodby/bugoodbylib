@@ -54,7 +54,7 @@ function HexDump( [byte[]]$obj )
 	}
 
 	$form = New-Object System.Windows.Forms.Form 
-	$form.Size = "400,200"
+	$form.Size = "500,200"
 	$form.Text = "HexDump"
 	$tb = New-Object System.Windows.Forms.TextBox
 	$tb.Text = ""
@@ -84,10 +84,18 @@ function ShowObj( $obj )
 		$str += ($obj.GetType().FullName + "`r`n")
 		$str += "[BaseType]`r`n"
 		$str += ($obj.GetType().BaseType.FullName + "`r`n`r`n")
+		
 		if ( $obj -is [array] ) {
 			$str += ("[Length: " + $obj.Length + "]`r`n")
 			$obj | %{ $str += ($_.toString() + "`r`n") }
-		} else {
+		}
+		elseif ( $obj -is [hashtable] ) {
+			$str += ("[Count: " + $obj.Count + "]`r`n")
+			foreach ( $k in $obj.Keys ) {
+				$str += ("{0} : {1}`r`n" -f $k, $obj[$k])
+			}
+		}
+		else {
 			$str += $obj.toString()
 		}
 	} else {

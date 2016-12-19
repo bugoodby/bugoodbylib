@@ -5,10 +5,10 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
+$ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 . ..\..\DebugTools.ps1
 
-$basedir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + "\\"
-$ini = Load-Ini -Path ($basedir + "config.ini")
+$ini = Load-Ini -Path ($ScriptDir + "config.ini")
 if ( -not $ini["width"] ) { $ini.Add("width", 500) }
 if ( -not $ini["height"] ) { $ini.Add("height", 150) }
 
@@ -78,4 +78,4 @@ $ini["posx"] = $form.Left
 $ini["posy"] = $form.Top
 $ini["width"] = $form.Width
 $ini["height"] = $form.Height
-Save-Ini -Path ($basedir + "config.ini") -IniData $ini
+Save-Ini -Path ($ScriptDir + "config.ini") -IniData $ini

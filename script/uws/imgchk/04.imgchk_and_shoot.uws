@@ -6,7 +6,7 @@ index = 0
 While 1
 	if CHKIMG(bmpfile, -1) then
 		GETTIME()
-		currenttime = G_TIME_YY4 + G_TIME_MM2 + G_TIME_DD2 + "_" + G_TIME_HH2 + G_TIME_NN2 + G_TIME_SS
+		currenttime = G_TIME_YY4 + G_TIME_MM2 + G_TIME_DD2 + "_" + G_TIME_HH2 + G_TIME_NN2 + G_TIME_SS2
 		
 		savefile = GET_CUR_DIR + "\saveimg" + index + "_" + currenttime + ".jpg"
 		SAVEIMG(savefile, 0, , , , , FALSE, 30)

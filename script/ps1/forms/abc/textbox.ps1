@@ -11,12 +11,17 @@ $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 
 $form = New-Object System.Windows.Forms.Form 
 $form.Text = "TextBox"
-$form.Size = New-Object System.Drawing.Size(500,500)
+$form.Size = New-Object System.Drawing.Size(500,550)
 $form.StartPosition = "WindowsDefaultLocation"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
 
+$label = New-Object System.Windows.Forms.Label
+$label.Location = New-Object System.Drawing.Point(10,10)
+$label.Size = New-Object System.Drawing.Size(230,20)
+$label.Text = "TextBox"
+
 $textBox = New-Object System.Windows.Forms.TextBox
-$textBox.Location = New-Object System.Drawing.Point(10, 10)
+$textBox.Location = New-Object System.Drawing.Point(10, ($label.Bottom))
 $textBox.Size = New-Object System.Drawing.Size(470, 350)
 $textBox.Text = ""
 $textBox.MultiLine = $true
@@ -52,7 +57,7 @@ $textBox2.AcceptsTab = $false
 $textBox2.WordWrap = $false
 
 $groupBox.Controls.AddRange(@($radio1, $radio2, $textBox2))
-$form.Controls.AddRange(@($textBox, $groupBox))
+$form.Controls.AddRange(@($label, $textBox, $groupBox))
 
 $asTop = [System.Windows.Forms.AnchorStyles]::Top
 $asBottom = [System.Windows.Forms.AnchorStyles]::Bottom

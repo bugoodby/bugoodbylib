@@ -11,7 +11,7 @@ While 1
 	fp = FOPEN(winFile, F_READ or F_WRITE1)
 	
 	GETTIME()
-	currenttime = G_TIME_YY4 + "/" + G_TIME_MM2 + "/" + G_TIME_DD2 + " " + G_TIME_HH2 + ":" + G_TIME_NN2 + ":" + G_TIME_SS
+	currenttime = G_TIME_YY4 + "/" + G_TIME_MM2 + "/" + G_TIME_DD2 + " " + G_TIME_HH2 + ":" + G_TIME_NN2 + ":" + G_TIME_SS2
 	
 	if CHKIMG(bmpfile, -1) then
 		PRINT currenttime + " : OK (X=" + G_IMG_X + ", Y=" + G_IMG_Y + ")"

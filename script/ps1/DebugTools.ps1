@@ -26,8 +26,18 @@ function Save-Ini( $Path, $IniData )
 
 function breakpoint()
 {
+	Write-Host '------[EnterNestedPrompt]-------'
+	Write-Host 'Get-Variable : Show variables.'
+	Write-Host 'PSCallStack : Show callstack.'
+	Write-Host '$xxx | Out-GridView : Show variable with gridview.'
+	Write-Host 'Set-PSDebug -trace 1:　スクリプトのトレースを行う'
+	Write-Host 'Set-PSDebug -Step: ステップ実行'
+	Write-Host 'HexDump: 16進数ダンプ'
+	Write-Host 'HexDumpWin: 16進数ダンプ(ウィンドウ表示)'
+	Write-Host 'ShowPG: PropetyGrid表示'
+	Write-Host '--------------------------------'
+	
 	$host.EnterNestedPrompt()
-	# Get-Variable
 }
 
 function MsgBox( [string]$str )
@@ -35,7 +45,36 @@ function MsgBox( [string]$str )
 	[System.Windows.Forms.MessageBox]::Show($str, "debug")
 }
 
-function HexDump( [byte[]]$obj )
+function hexdump( [byte[]]$allData )
+{
+	$dumpLine = {
+		PARAM([byte[]]$data)
+		$line = ("{0:X8}: " -f $offset)
+		$chars = ""
+		foreach ($b in $data) {
+			$line += ("{0:x2} " -f $b)
+			if ($b -ge 0x20 -and $b -le 0x7e) {
+				$chars += [char]$b
+			} else {
+				$chars += "."
+			}
+		}
+		$line += "   " * (16 - $data.length)
+		Write-Host $line, $chars
+	}
+
+	Write-Host "(Len: $($allData.Length))"
+	$offset = 0
+	do {
+		[byte[]]$ldata = $allData[$offset..($offset+15)]
+		if ( $ldata.length -gt 0 ) {
+			$dumpLine.Invoke($ldata)
+		}
+		$offset += 16
+	} while ($ldata.length -gt 0)
+}
+
+function HexDumpWin( [byte[]]$obj )
 {
 	$dumpLine = {
 		PARAM([byte[]]$data)

@@ -182,5 +182,5 @@ $form.Add_DragDrop({
 })
 
 & $SetPortName
-$form.ShowDialog()
+[void]$form.ShowDialog()
 

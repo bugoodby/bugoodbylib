@@ -63,7 +63,7 @@ $form.AllowDrop = $true
 $form.Add_DragEnter({$_.Effect = 'Copy'})
 $form.Add_DragDrop({
 	foreach ( $dropPath in $_.Data.GetData("FileDrop") ) {
-		$files = Get-ChildItem $dropPath | ?{ ! $_.PSIsContainer }
+		$files = Get-ChildItem -LiteralPath $dropPath | ?{ ! $_.PSIsContainer }
 		$files | %{
 			if ( $_.Extension -eq ".txt" ) {
 				$textBox.Text = $_.FullName
@@ -72,7 +72,7 @@ $form.Add_DragDrop({
 	}
 })
 
-$form.ShowDialog()
+[void]$form.ShowDialog()
 
 $ini["posx"] = $form.Left
 $ini["posy"] = $form.Top

@@ -6,9 +6,9 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $form = New-Object System.Windows.Forms.Form 
 $form.Text = "EnvEdit"
-$form.Size = New-Object System.Drawing.Size(500,500)
+$form.Size = New-Object System.Drawing.Size(600,500)
 $form.StartPosition = "CenterScreen"
-$form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSingle
+$form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
 
 $Combo = New-Object System.Windows.Forms.Combobox
 $Combo.Location = New-Object System.Drawing.Point(10,10)
@@ -25,7 +25,7 @@ $Combo.Add_SelectedIndexChanged({
 
 $textBox = New-Object System.Windows.Forms.TextBox
 $textBox.Location = New-Object System.Drawing.Point(10, 40)
-$textBox.Size = New-Object System.Drawing.Size(450, 350)
+$textBox.Size = New-Object System.Drawing.Size(550, 350)
 $textBox.Text = ""
 $textBox.MultiLine = $true
 $textBox.ScrollBars = "Vertical"
@@ -56,5 +56,11 @@ $form.Controls.Add($Combo)
 $form.Controls.Add($textBox)
 $form.Controls.Add($button)
 
+$asTop = [System.Windows.Forms.AnchorStyles]::Top
+$asBottom = [System.Windows.Forms.AnchorStyles]::Bottom
+$asLeft = [System.Windows.Forms.AnchorStyles]::Left
+$asRight = [System.Windows.Forms.AnchorStyles]::Right
+$textBox.Anchor = $asTop -bor $asBottom -bor $asLeft -bor $asRight
+$button.Anchor = $asLeft -bor $asBottom
 
-$form.ShowDialog()
+[void]$form.ShowDialog()

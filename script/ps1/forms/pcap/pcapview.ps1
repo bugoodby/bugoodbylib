@@ -69,6 +69,6 @@ $form.Add_DragDrop({
 	Refresh-TreeView $_.Data.GetData("FileDrop")[0]
 })
 
-$form.Showdialog()
+[void]$form.Showdialog()
 
 

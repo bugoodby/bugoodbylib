@@ -81,7 +81,7 @@ $button.Anchor = $asBottom -bor $asLeft
 
 $AddFiles = {
 	PARAM([string]$path)
-	Get-ChildItem -Recurse $path | ?{ !$_.PSIsContainer } | %{
+	Get-ChildItem -Recurse -LiteralPath $path | ?{ !$_.PSIsContainer } | %{
 		$item = New-Object System.Windows.Forms.ListViewItem($_.Name)
 		$item.UseItemStyleForSubItems = $false
 		[void]$item.SubItems.Add($_.Extension)

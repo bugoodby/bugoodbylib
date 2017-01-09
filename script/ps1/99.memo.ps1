@@ -20,3 +20,7 @@ Get-ExecutionPolicy
 $Host.GetType()
 $Host
 
+"======================="
+" Loded Assemblies"
+"======================="
+[System.AppDomain]::CurrentDomain.GetAssemblies()

@@ -30,8 +30,6 @@ function breakpoint()
 	Write-Host 'Get-Variable : Show variables.'
 	Write-Host 'PSCallStack : Show callstack.'
 	Write-Host '$xxx | Out-GridView : Show variable with gridview.'
-	Write-Host 'Set-PSDebug -trace 1:　スクリプトのトレースを行う'
-	Write-Host 'Set-PSDebug -Step: ステップ実行'
 	Write-Host 'HexDump: 16進数ダンプ'
 	Write-Host 'HexDumpWin: 16進数ダンプ(ウィンドウ表示)'
 	Write-Host 'ShowPG: PropetyGrid表示'

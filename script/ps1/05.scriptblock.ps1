@@ -15,4 +15,4 @@ func "aaa", "bbb" # NG, ‘æ1ˆø”‚É”z—ñ‚Å“n‚µ‚Ä‚µ‚Ü‚¤
 
 "***scriptBlock***"
 & $scriptBlock
-$scriptBlock.Invoke("aaa", "bbb")
+& $scriptBlock "aaa" "bbb"

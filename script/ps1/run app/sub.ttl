@@ -1,0 +1,4 @@
+
+pause 5
+
+setexitcode 5

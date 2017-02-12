@@ -6,8 +6,10 @@ function Load-Ini( $Path )
 	$key = ""
 	$inidata = @{}
 	if ( Test-Path $Path ) {
-		$lines = Get-Content $Path
-		foreach ( $l in $lines ) {
+		#$enc = [Text.Encoding]::GetEncoding("Shift_JIS")
+		$enc = New-Object System.Text.UTF8Encoding($false)
+		$sr = New-Object System.IO.StreamReader($Path, $enc)
+		while (($l = $sr.ReadLine()) -ne $null) {
 			if ( $l -match "^;"){ continue }
 			if ( $l.Trim().Length -eq 0 ) { continue }
 			if ( $l -match "\[(.*)\]" ) {

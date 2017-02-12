@@ -8,11 +8,11 @@ $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 $CurrentTime = Get-Date -Format "yyyyMMdd_HHmmss"
 $OutFile = $ScriptDir + "Tmp_" + $CurrentTime + ".txt"
 
-if ( [System.IO.File]::Exists($OutFile) ) {
+if ( [IO.File]::Exists($OutFile) ) {
 	Write-Host "File already exists: $OutFile"
 } else {
 	Write-Host "[create] $OutFile"
-	New-Item -Path $OutFile -ItemType File | Out-Null
+	New-Item -Path $OutFile -ItemType File > $null
 }
 
 
@@ -20,11 +20,11 @@ if ( [System.IO.File]::Exists($OutFile) ) {
 $CurrentTime = Get-Date -Format "yyyyMMdd_HHmmss"
 $OutDir = $ScriptDir + "Tmp_" + $CurrentTime
 
-if ( [System.IO.Directory]::Exists($OutDir) ) {
+if ( [IO.Directory]::Exists($OutDir) ) {
 	Write-Host "Directory already exists: $OutDir"
 } else {
 	Write-Host "[create] $OutDir"
-	New-Item -Path $OutDir -ItemType Directory | Out-Null
+	New-Item -Path $OutDir -ItemType Directory > $null
 }
 
 

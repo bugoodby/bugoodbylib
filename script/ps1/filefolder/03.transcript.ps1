@@ -7,9 +7,9 @@ $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 
 # cleanup a working folder.
 $LogDir = $ScriptDir + "Log\"
-if ( -not [System.IO.Directory]::Exists($LogDir) ) {
+if ( -not [IO.Directory]::Exists($LogDir) ) {
 	Write-Host "[create] $LogDir"
-	New-Item -Path $LogDir -ItemType Directory | Out-Null
+	New-Item -Path $LogDir -ItemType Directory > $null
 }
 
 $CurrentTime = Get-Date -Format "yyyyMMdd_HHmmss"

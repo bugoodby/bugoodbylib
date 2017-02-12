@@ -5,15 +5,15 @@ Test-Path $path -PathType leaf
 Test-Path $path -PathType container
 
 "`n***Exists***"
-[System.IO.File]::Exists($path)
-[System.IO.Directory]::Exists($path)
+[IO.File]::Exists($path)
+[IO.Directory]::Exists($path)
 
 
 "`n***System.IO.Path***"
-[System.IO.Path]::GetDirectoryName($path)
-[System.IO.Path]::GetFileName($path)
-[System.IO.Path]::GetExtension($path)
-[System.IO.Path]::GetFileNameWithoutExtension($path)
+[IO.Path]::GetDirectoryName($path)
+[IO.Path]::GetFileName($path)
+[IO.Path]::GetExtension($path)
+[IO.Path]::GetFileNameWithoutExtension($path)
 
 "`n***Split-Path***"
 Split-Path -Path $path -Qualifier
@@ -25,3 +25,11 @@ Split-Path -Path $path -Leaf
 "`n***ScriptDir***"
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 $ScriptDir
+
+
+"`n***Replace***"
+$newFile = $path -Replace "\\[^\\]*$", "\replace.txt"
+$newFile
+
+$newExt = $path -Replace "\.[^\.]*$", ".newExt"
+$newExt

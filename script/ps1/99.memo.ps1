@@ -1,3 +1,10 @@
+
+"======================="
+" Check Alias"
+"======================="
+$clsAccelerators = "System.Management.Automation.TypeAccelerators"
+[psobject].Assembly.GetType($clsAccelerators)::Get
+
 "======================="
 " Get-Variable"
 "======================="

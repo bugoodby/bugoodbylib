@@ -3,24 +3,21 @@ Set-StrictMode -Version 2.0
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 
-function ReadExcel()
+function UpdateExcel( [string]$path )
 {
-	$path = $ScriptDir + "_result_02.Write.xlsx"
-	
 	try {
 		$objExcel = New-Object -ComObject Excel.Application
 		$objExcel.Visible = $true
 		$objExcel.DisplayAlerts = $false
 		
-		$objBook = $objExcel.Workbooks.Add()
-		$objSheet = $objBook.Worksheets.Item(1)
+		$objBook = $objExcel.Workbooks.Open($path, $null, $false)
+		$objSheet = $objBook.Worksheets.Item("Sheet2")
 		
-		$objSheet.Cells.Item(2, 2) = "‚Ù‚°‚Ù‚°"
-		$objSheet.Range("A1").Formula = "=1+1"
+		$objSheet.Cells.Item(1, 1).Value2 = "‚Ù‚°‚Ù‚°"
 		$objSheet.Range("A2").Value2 = "‚Ó‚ª‚Ó‚ª"
 		
-		Write-Host "save:" $path
-		$objBook.SaveAs($path)
+		Write-Host "save"
+		$objBook.Save()
 		
 		$objBook.Close()
 		$objExcel.Quit()
@@ -32,6 +29,9 @@ function ReadExcel()
 	}
 }
 
+$srcPath = $ScriptDir + "test1.xlsx"
+$dstPath = $ScriptDir + "test1_copy.xlsx"
+Copy-Item -LiteralPath $srcPath -Destination $dstPath
 
-ReadExcel
+UpdateExcel $dstPath
 

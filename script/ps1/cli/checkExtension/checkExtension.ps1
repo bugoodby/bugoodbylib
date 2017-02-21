@@ -17,7 +17,10 @@ function Check-Extension( $path )
 }
 
 
-$ret = Check-Extension $args[0]
+if ( Check-Extension $args[0] ) {
+	Write-Host "Extension OK"
+} else {
+	Write-Host "Extension NG"
+}
 
-$ret
 

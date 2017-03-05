@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
-. ..\DebugTools.ps1
+. ..\..\DebugTools.ps1
 
 $CurrentTime = Get-Date -Format "yyyyMMdd_HHmmss"
 $OutFile = $ScriptDir + $CurrentTime + ".txt"

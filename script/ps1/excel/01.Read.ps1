@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 
@@ -22,6 +23,8 @@ function ReadExcel()
 		
 		$objBook = $objExcel.Workbooks.Open($path, $null, $true)
 		$objSheet = $objBook.Worksheets.Item(1)
+		
+		$host.EnterNestedPrompt()
 		
 		#----------------------------
 		# Cells, Range

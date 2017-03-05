@@ -1,9 +1,10 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 
-function ReadExcel()
+function WriteExcel()
 {
 	$path = $ScriptDir + "_result_02.Write.xlsx"
 	
@@ -15,7 +16,7 @@ function ReadExcel()
 		$objBook = $objExcel.Workbooks.Add()
 		$objSheet = $objBook.Worksheets.Item(1)
 		
-		$objSheet.Cells.Item(2, 2) = "‚Ù‚°‚Ù‚°"
+		$objSheet.Cells.Item(2, 2) = "‚Ù‚°‚Ù‚°‚Ù‚°‚Ù‚°‚Ù‚°‚Ù‚°"
 		$objSheet.Range("A1").Formula = "=1+1"
 		$objSheet.Range("A2").Value2 = "‚Ó‚ª‚Ó‚ª"
 		
@@ -33,5 +34,5 @@ function ReadExcel()
 }
 
 
-ReadExcel
+WriteExcel
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FORMAT>
+  <RECORD>
+    <FIELD ID="1" type="CharTerm" TERMINATOR="\t" 
+      MAX_LENGTH="12"/>
+    <FIELD ID="2" type="CharTerm" TERMINATOR="\t" MAX_LENGTH="20" 
+      COLLATION="SQL_Latin1_General_CP1_CI_AS"/>
+    <FIELD ID="3" type="CharTerm" TERMINATOR="\r\n" 
+      MAX_LENGTH="30" COLLATION="SQL_Latin1_General_CP1_CI_AS"/>
+  </RECORD>
+  <ROW>
+    <COLUMN SOURCE="1" NAME="age" type="SQLINT"/>
+    <COLUMN SOURCE="3" NAME="firstname" type="SQLVARYCHAR"/>
+    <COLUMN SOURCE="2" NAME="lastname" type="SQLVARYCHAR"/>
+  </ROW>
+</FORMAT>

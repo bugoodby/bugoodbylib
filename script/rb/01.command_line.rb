@@ -1,20 +1,17 @@
 #!/bin/ruby
 
-#-----------------------------------------------------------
-# main
-#-----------------------------------------------------------
 def main()
 	
-	puts "count = " << ARGV.length.to_s
+	puts "count = #{ARGV.length}"
 	
 	puts "--- method 1 ---\n"
 	for arg in ARGV
-		p arg
+		puts arg
 	end
 	
 	puts "--- method 2 ---\n"
 	ARGV.each {|arg|
-		p arg
+		puts arg
 	}
 	
 	puts "--- method 3 ---\n"

@@ -67,10 +67,25 @@ function Get-InputString3()
 
 while($true)
 {
-	Get-InputString3
+	Write-Host '----------------------------------------'
+	Write-Host '[0] Get-InputString1'
+	Write-Host '[1] Get-InputString2'
+	Write-Host '[2] Get-InputString3'
+	Write-Host '[q] quit'
+	Write-Host '----------------------------------------'
+	$response = Read-Host "Select number"
+	if ( $response -eq "q" ) { exit 1 }
+	
+	switch ($response)
+	{
+	'0' { Get-InputString1 }
+	'1' { Get-InputString2 }
+	'2' { Get-InputString3 }
+	default { Write-Host '[ERROR] invalid number.' }
+	}
 	
 	$answer = Read-Host "Repeat? (y/n)"
-	if ( $answer -ne "y" ) {
+	if ( $answer.ToLower() -ne "y" ) {
 		break
 	}
 }

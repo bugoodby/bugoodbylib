@@ -1,4 +1,5 @@
 #!/bin/ruby
+#!/bin/ruby
 
 root2 =  ARGV[0].gsub("\\", "/")
 puts root2

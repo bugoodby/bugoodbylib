@@ -1,13 +1,11 @@
 #!/bin/ruby
 
-#-----------------------------------------------------------
-# main
-#-----------------------------------------------------------
-def main()
+#--------------------------
+# Array
+#--------------------------
+def test_array()
 	
-	#--------------------------
-	# Array
-	#--------------------------
+	puts "******* array *******"
 	
 	# 初期化
 	a = Array::new
@@ -18,14 +16,9 @@ def main()
 	p fruits.length
 	
 	# 要素の追加
-	puts "before"
-	p fruits
-	
 	fruits << "pear"
 	fruits.push("grape")
 	fruits.unshift("strawberry")
-	
-	puts "after"
 	p fruits
 	
 	# ブロック実行
@@ -33,15 +26,22 @@ def main()
 		p x
 	}
 	
-	scores = ["55", 49, 100, "150", 0]
+	# データ型の混在
+	scores = ["55", 49, 5.5, "150", 0]
 	p scores
 	scores.each {|x|
-		puts x.class
+		puts "#{x} : #{x.class}"
 	}
-	
-	#--------------------------
-	# Hash
-	#--------------------------
+
+end
+
+
+#--------------------------
+# Hash
+#--------------------------
+def test_hash()
+
+	puts "******* hash *******"
 	
 	# 初期化
 	h = Hash::new
@@ -56,13 +56,8 @@ def main()
 	p price.length
 	
 	# 要素の追加
-	puts "before"
-	p price
-	
 	price["pear"] = 444
 	price.store("grape", 2000)
-	
-	puts "after"
 	p price
 	
 	# ブロック実行
@@ -71,5 +66,5 @@ def main()
 	}
 end
 
-
-main()
+test_array()
+test_hash()

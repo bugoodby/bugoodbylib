@@ -66,7 +66,7 @@ $textBox.Anchor = $asTop -bor $asBottom -bor $asLeft -bor $asRight
 $form.AllowDrop = $true
 $form.Add_DragEnter({$_.Effect = 'Copy'})
 $form.Add_DragDrop({
-	Refresh-TreeView $_.Data.GetData("FileDrop")[0]
+	Refresh-TreeView $_.Data.GetFileDropList()[0]
 })
 
 [void]$form.Showdialog()

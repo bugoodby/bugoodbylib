@@ -144,7 +144,7 @@ function MainForm_Show()
 	$form.Add_DragEnter({$_.Effect = 'Copy'})
 	$form.Add_DragDrop({
 		$form.Cursor = "WaitCursor"
-		foreach ( $path in $_.Data.GetData("FileDrop") ) {
+		foreach ( $path in $_.Data.GetFileDropList() ) {
 			$AddFiles.Invoke($path)
 		}
 		$form.Cursor = "Default"

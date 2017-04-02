@@ -70,7 +70,7 @@ $form.Add_DragEnter({$_.Effect = 'Copy'})
 $form.Add_DragDrop({
 	$form.Cursor = "WaitCursor"
 	$textBox.Text = ""
-	foreach ( $path in $_.Data.GetData("FileDrop") ) {
+	foreach ( $path in $_.Data.GetFileDropList() ) {
 		if ( $radio2.Checked ) {
 			$files = Get-ChildItem -Recurse -LiteralPath $path | ?{ $_.PSIsContainer }
 		} else {

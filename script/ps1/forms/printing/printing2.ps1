@@ -115,8 +115,6 @@ Add-Type -ReferencedAssemblies $assemblies -TypeDefinition $source -Language CSh
 
 function EditForm_Show( [ref]$times, [ref]$interval )
 {
-	Write-Host $times.Value
-	
 	$form = New-Object System.Windows.Forms.Form 
 	$form.Text = "Settings"
 	$form.Size = New-Object System.Drawing.Size(260,150)
@@ -173,18 +171,23 @@ function MainForm_Show()
 
 	$form = New-Object System.Windows.Forms.Form 
 	$form.Text = "test"
-	$form.Size = New-Object System.Drawing.Size(500,350)
+	$form.Size = New-Object System.Drawing.Size(500,380)
 	$form.StartPosition = "WindowsDefaultLocation"
 	$form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
 	$form.Font = New-Object System.Drawing.Font("", 9)
 
+	$grp1 = New-Object System.Windows.Forms.GroupBox
+	$grp1.Location = New-Object System.Drawing.Size(10,10) 
+	$grp1.Size = New-Object System.Drawing.Size(450,100) 
+	$grp1.Text = "windows" 
+
 	$label = New-Object System.Windows.Forms.Label
-	$label.Location = New-Object System.Drawing.Point(10,10)
+	$label.Location = New-Object System.Drawing.Point(10,20)
 	$label.Size = New-Object System.Drawing.Size(230,20)
 	$label.Text = "Printer:"
 
 	$combo = New-Object System.Windows.Forms.Combobox
-	$combo.Location = New-Object System.Drawing.Point(10,30)
+	$combo.Location = New-Object System.Drawing.Point(10,($label.Bottom))
 	$combo.size = New-Object System.Drawing.Size(250,30)
 	$combo.DropDownStyle = "DropDownList"
 	& {
@@ -217,9 +220,49 @@ function MainForm_Show()
 	$btnProp.Add_Click({
 		[PrintUtil]::OpenProperties($combo.Text)
 	})
+	
+	$grp2 = New-Object System.Windows.Forms.GroupBox
+	$grp2.Location = New-Object System.Drawing.Size(10,10) 
+	$grp2.Size = New-Object System.Drawing.Size(450,100) 
+	$grp2.Text = "direct" 
+
+	$lbl2 = New-Object System.Windows.Forms.Label
+	$lbl2.Location = New-Object System.Drawing.Point(10,20)
+	$lbl2.Size = New-Object System.Drawing.Size(50,20)
+	$lbl2.Text = "IP Addr:"
+
+	$textBox = New-Object System.Windows.Forms.TextBox
+	$textBox.Location = New-Object System.Drawing.Point(($lbl2.Right+10), ($lbl2.Top))
+	$textBox.Size = New-Object System.Drawing.Size(200, 30)
+	$textBox.Text = ""
+	$textBox.MultiLine = $false
+	$textBox.ScrollBars = "None"
+	$textBox.AcceptsReturn = $false
+	$textBox.AcceptsTab = $false
+	$textBox.WordWrap = $false
+
+	$btnRaw = New-Object System.Windows.Forms.Button
+	$btnRaw.Location = New-Object System.Drawing.Point(($textBox.Left),($textBox.Bottom+10))
+	$btnRaw.Size = New-Object System.Drawing.Size(75,30)
+	$btnRaw.Text = "Raw"
+	$btnRaw.Add_Click({
+		foreach ( $item in $listView.SelectedItems ) {
+			[PrintUtil]::SendRaw($textBox.Text, $item.SubItems[3].Text)
+		}
+	})
+
+	$btnLPR = New-Object System.Windows.Forms.Button
+	$btnLPR.Location = New-Object System.Drawing.Point(($btnRaw.Right+10),($btnRaw.Top))
+	$btnLPR.Size = New-Object System.Drawing.Size(75,30)
+	$btnLPR.Text = "LPR"
+	$btnLPR.Add_Click({
+		foreach ( $item in $listView.SelectedItems ) {
+			[PrintUtil]::InvokeLPR($textBox.Text, $item.SubItems[3].Text)
+		}
+	})
 
 	$listView = New-Object System.Windows.Forms.ListView
-	$listView.Location = New-Object System.Drawing.Point(10,($lblPort.Bottom+10))
+	$listView.Location = New-Object System.Drawing.Point(10,($grp1.Bottom+10))
 	$listView.Size = New-Object System.Drawing.Size(450,160)
 	$listView.View = "Details"
 	$listView.GridLines = $true
@@ -282,7 +325,28 @@ function MainForm_Show()
 		$listView.Items.Clear()
 	})
 	
-	$form.Controls.AddRange(@($label,$combo,$btnSpool,$btnProp,$lblPort,$listView,$btnPrint,$btnClear))
+	$directModeFlg = $false
+	$btnTgl = New-Object System.Windows.Forms.Button
+	$btnTgl.Location = New-Object System.Drawing.Point(($btnClear.Right+20),($btnClear.Top))
+	$btnTgl.Size = New-Object System.Drawing.Size(75,30)
+	$btnTgl.Text = "Change"
+	$btnTgl.Add_Click({
+		if ( $directModeFlg ) {
+			$directModeFlg = $false
+			$btnPrint.Enabled = $true
+			$form.Controls.Add($grp1)
+			$form.Controls.Remove($grp2)
+		} else {
+			$directModeFlg = $true
+			$btnPrint.Enabled = $false
+			$form.Controls.Remove($grp1)
+			$form.Controls.Add($grp2)
+		}
+	})
+	
+	$grp1.Controls.AddRange(@($label,$combo,$btnSpool,$btnProp,$lblPort))
+	$grp2.Controls.AddRange(@($lbl2,$textBox,$btnRaw,$btnLPR))
+	$form.Controls.AddRange(@($grp1,$listView,$btnPrint,$btnClear,$btnTgl))
 
 	$asTop = [System.Windows.Forms.AnchorStyles]::Top
 	$asBottom = [System.Windows.Forms.AnchorStyles]::Bottom
@@ -291,17 +355,19 @@ function MainForm_Show()
 	$listView.Anchor = $asTop -bor $asBottom -bor $asLeft -bor $asRight
 	$btnPrint.Anchor = $asBottom -bor $asLeft
 	$btnClear.Anchor = $asBottom -bor $asLeft
-	
+	$btnTgl.Anchor = $asBottom -bor $asLeft
 	
 	$form.AllowDrop = $true
 	$form.Add_DragEnter({$_.Effect = 'Copy'})
 	$form.Add_DragDrop({
 		foreach ( $path in $_.Data.GetFileDropList() ) {
-			$item = New-Object System.Windows.Forms.ListViewItem([System.IO.Path]::GetFileName($path))
-			[void]$item.SubItems.Add(1)
-			[void]$item.SubItems.Add(0)
-			[void]$item.SubItems.Add($path)
-			[void]$listView.Items.Add($item)
+			if ( [IO.File]::Exists($path) ) {
+				$item = New-Object System.Windows.Forms.ListViewItem([IO.Path]::GetFileName($path))
+				[void]$item.SubItems.Add(1)
+				[void]$item.SubItems.Add(0)
+				[void]$item.SubItems.Add($path)
+				[void]$listView.Items.Add($item)
+			}
 		}
 	})
 

@@ -62,7 +62,7 @@ $textBox.Anchor = $asTop -bor $asLeft -bor $asRight
 $form.AllowDrop = $true
 $form.Add_DragEnter({$_.Effect = 'Copy'})
 $form.Add_DragDrop({
-	foreach ( $dropPath in $_.Data.GetData("FileDrop") ) {
+	foreach ( $dropPath in $_.Data.GetFileDropList() ) {
 		$files = Get-ChildItem -LiteralPath $dropPath | ?{ ! $_.PSIsContainer }
 		$files | %{
 			if ( $_.Extension -eq ".txt" ) {

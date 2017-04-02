@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -19,7 +20,7 @@ $form.Icon = $Icon
 
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10,10)
-$label.Size = New-Object System.Drawing.Size(230,20)
+$label.Size = New-Object System.Drawing.Size(600,20)
 $label.Text = "List"
 
 $listView = New-Object System.Windows.Forms.ListView
@@ -81,6 +82,9 @@ $button.Anchor = $asBottom -bor $asLeft
 
 $AddFiles = {
 	PARAM([string]$path)
+	
+	$label.Text = $path
+	
 	Get-ChildItem -Recurse -LiteralPath $path | ?{ !$_.PSIsContainer } | %{
 		$item = New-Object System.Windows.Forms.ListViewItem($_.Name)
 		$item.UseItemStyleForSubItems = $false
@@ -99,7 +103,7 @@ $form.AllowDrop = $true
 $form.Add_DragEnter({$_.Effect = 'Copy'})
 $form.Add_DragDrop({
 	$form.Cursor = "WaitCursor"
-	foreach ( $path in $_.Data.GetData("FileDrop") ) {
+	foreach ( $path in $_.Data.GetFileDropList() ) {
 		$AddFiles.Invoke($path)
 	}
 	$form.Cursor = "Default"

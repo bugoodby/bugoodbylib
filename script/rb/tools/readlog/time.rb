@@ -187,9 +187,12 @@ class Parser
 	
 	def parse( infile )
 		@infile = infile
-		lines = File.open(infile, "r:UTF-8").grep(/(:HOGE|aiueo\(.+\))/)
+#		lines = File.open(infile, "r:UTF-8").grep(/(:HOGE|aiueo\(.+\))/)
+		lines = File.open(infile, "r:UTF-8")
 		
 		lines.each {|line|
+			next unless ( line.include?(":HOGE") )
+			
 			if ( / POINT1/ =~ line )
 				@ddm.setData("12345", "POINT1", line)
 				@pdm.setData("12345", "1", "POINT1", line)

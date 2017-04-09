@@ -19,6 +19,6 @@ echo file+ext    : %~nx1
 echo =====================
 
 set script=%~dp0time.rb
-ruby -Ku "%script%" "%1" > %~dp1kekka.txt
+ruby "%script%" "%1" > %~dp1kekka.txt
 
 pause

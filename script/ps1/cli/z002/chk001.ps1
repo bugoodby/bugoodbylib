@@ -1,8 +1,8 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
-#$host.EnterNestedPrompt()
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
+. ..\..\DebugTools.ps1
 
 #-- XlDirection --
 $xlUp      = -4162
@@ -34,33 +34,29 @@ $xlCalculationManual = -4135
 $xlCalculationSemiautomatic = 2
 
 
-function ReadCSV( $path )
+$CurrentTime = Get-Date -Format "yyyyMMdd_HHmmss"
+$OutFile = $ScriptDir + $CurrentTime + ".txt"
+
+
+
+$filters = @(
+	@{ 'regexp' = "Hoge Start\( attr = (\d+), id = (.+), timing = (\d+), ptr = (.+)"; 'params' = @(1,2,3); },
+	@{ 'regexp' = "Hoge End\( ret = (.+) \)"; 'params' = @(1); }
+)
+
+
+function setMatchData( $filter, $parts, $matches )
 {
-	$tblHeader = @{}
-	$tblData = @()
-	
-	$enc = [Text.Encoding]::GetEncoding("Shift_JIS")
-	$sr = New-Object System.IO.StreamReader($path, $enc)
-	
-	while (($line = $sr.ReadLine()) -ne $null) {
-		if ( $line.Contains("タイトル行") ) {
-			Write-Host "HEADER FOUND"
-			$items = $line.Split(",")
-			for ( $i = 0; $i -lt $items.Length; $i++ ) {
-				$tblHeader[$items[$i]] = $i
-			}
-			break
-		}
+	Write-Host '------------------'
+	Write-Host $parts[0]
+	Write-Host $parts[1]
+	Write-Host $parts[2]
+	Write-Host $parts[3]
+	Write-Host $parts[4]
+	Write-Host $parts[5]
+	foreach ( $i in $filter.params ) {
+		Write-Host "Filter $i :" $matches[$i]
 	}
-	while (($line = $sr.ReadLine()) -ne $null) {
-		$items = $line.Split(",")
-		$tblData += ,$items
-	}
-	
-	$sr.Close()
-	$sr = $null
-	
-	return @{ "Header" = $tblHeader; "Data" = $tblData; }
 }
 
 function RGB( $red, $green, $blue )
@@ -68,21 +64,54 @@ function RGB( $red, $green, $blue )
 	return (([uint32]$red) + ([uint32]$green * 256) + ([uint32]$blue * 65536) )
 }
 
-function WriteExcel( $tbl )
+function AnalyzeLogFile( $objSheet, $startRow, $startCol )
 {
-	$path = $ScriptDir + "_result_04.csv.xlsx"
+	$row = $startRow
+
+	$path = ($ScriptDir + "sample.txt")
+	$encoding = New-Object System.Text.UTF8Encoding($false)
+	$sr = New-Object System.IO.StreamReader($path, $encoding)
+	
+	while (($line = $sr.ReadLine()) -ne $null) {
+		$parts = $line.split(":", 6)
+		if ( $parts.length -ne 6 ) { continue }
+		
+		foreach ( $f in $filters ) {
+			if ( $parts[5] -Match $f.regexp ) {
+				setMatchData $f $parts $matches
+				
+				$col = $startCol
+				for ( $i = 0; $i -lt 6; $i++ ) {
+					$objSheet.Cells.Item($row, $col).Value2 = $parts[$i]
+					$col++
+				}
+				foreach ( $i in $f.params ) {
+					$objSheet.Cells.Item($row, $col).Value2 = $matches[$i]
+					$col++
+				}
+				
+				$row++
+			}
+		}
+	}
+	
+	$sr.Close()
+}
+
+function main() 
+{
+	$path = $ScriptDir + "_result_chk001.xlsx"
 	
 	try {
+		#-----------------------------------------------
+		# Setup worksheet
+		#-----------------------------------------------
 		$objExcel = New-Object -ComObject Excel.Application
 		$objExcel.Visible = $true
 		$objExcel.DisplayAlerts = $false
-#		$objExcel.ScreenUpdating = $false
-#		$objExcel.EnableEvents = $false
 		
 		$objBook = $objExcel.Workbooks.Add()
 		$objSheet = $objBook.Worksheets.Item(1)
-		
-#		$objExcel.Calculation = $xlCalculationManual
 		
 		$objSheet.Name = "from CSV"
 		
@@ -90,25 +119,21 @@ function WriteExcel( $tbl )
 		$col = 1
 		
 		# ヘッダ作成
-		$h_order = $tbl.Header.GetEnumerator() | sort -Property Value
-		foreach ( $de in $h_order ) {
-			$objSheet.Cells.Item($row, $col).Value2 = $de.Name
+		$headerNames = @("time", "aaa", "bbb", "ccc", "ddd", "comment", "param1", "param2", "param3")
+		foreach ( $h in $headerNames ) {
+			$objSheet.Cells.Item($row, $col).Value2 = $h
 			$col++
 		}
 		$row++
 		
-		# データ作成
-		foreach ( $record in $tbl.Data ) {
-			if ( $record[$tbl.Header['ID']] -eq "A02" ) {
-				$col = 1
-				foreach ($item in $record) {
-					$objSheet.Cells.Item($row, $col).Value2 = $item
-					$col++
-				}
-				$row++
-			}
-		}
+		#-----------------------------------------------
+		# Write data to worksheet
+		#-----------------------------------------------
+		AnalyzeLogFile $objSheet $row 1
 		
+		#-----------------------------------------------
+		# Teardown worksheet
+		#-----------------------------------------------
 		# テーブルの範囲確定
 		$rt = $objSheet.UsedRange
 		
@@ -132,7 +157,6 @@ function WriteExcel( $tbl )
 		
 		# 列の幅を自動調整
 		$objSheet.Range($rs, $re).EntireColumn.AutoFit() > $null
-		$objSheet.Cells.Item(1, 1).ColumnWidth = 15  # 個別設定
 		
 		# オートフィルタの設定
 		$objSheet.Cells.Item(1, 1).EntireRow.AutoFilter() > $null
@@ -154,17 +178,4 @@ function WriteExcel( $tbl )
 	}
 }
 
-
-
-$tbl = ReadCSV ($ScriptDir + "database.csv")
-
-$tbl.Header
-
-$watch = New-Object System.Diagnostics.StopWatch
-$watch.Start()
-
-WriteExcel $tbl
-
-$watch.Stop()
-$t = $watch.Elapsed
-"{0} 秒" -f $t.Seconds
+main

@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 
 function Get-FileList( $path, $recurse, $ext )

@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -14,6 +15,7 @@ $form.Text = "TextBox"
 $form.Size = New-Object System.Drawing.Size(500,550)
 $form.StartPosition = "WindowsDefaultLocation"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
+$form.Font = New-Object System.Drawing.Font("", 9)
 
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10,10)

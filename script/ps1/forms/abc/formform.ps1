@@ -1,5 +1,6 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 . ..\..\DebugTools.ps1
@@ -67,6 +68,7 @@ $form.Text = "test"
 $form.Size = New-Object System.Drawing.Size(800,600)
 $form.StartPosition = "WindowsDefaultLocation"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
+$form.Font = New-Object System.Drawing.Font("", 9)
 
 Add-TextBox $form
 Add-Button $form

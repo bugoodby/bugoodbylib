@@ -1,11 +1,11 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 function Load-Ini( $Path )
 {
 	$inidata = @{}
 	if ( Test-Path $Path ) {
-		while (($line = $sr.ReadLine()) -ne $null) {
 		$lines = Get-Content $Path
 		foreach ( $l in $lines ) {
 			if ( $l -match "^;"){ continue }

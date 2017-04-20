@@ -16,6 +16,7 @@ $form.Text = "test"
 $form.Size = New-Object System.Drawing.Size(500,300)
 $form.StartPosition = "WindowsDefaultLocation"
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Sizable
+$form.Font = New-Object System.Drawing.Font("", 9)
 $form.Icon = $Icon
 
 $label = New-Object System.Windows.Forms.Label

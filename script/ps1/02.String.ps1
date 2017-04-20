@@ -1,8 +1,8 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+#$host.EnterNestedPrompt()
 
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
-. .\DebugTools.ps1
 
 "---------------------------------------------"
 " ‘OŒã‚Ì‹ó”’‚Ìœ‹"

@@ -8,6 +8,15 @@ Add-Type -AssemblyName System.Drawing
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 . ..\..\DebugTools.ps1
 
+Get-Location
+$WorkDir = $env:LOCALAPPDATA + '\startprocess\'
+if ( ![IO.Directory]::Exists($WorkDir) ) {
+	New-Item -Path $WorkDir -ItemType Directory > $null
+}
+Set-Location $WorkDir
+Get-Location
+
+
 $ini = Load-Ini -Path ($ScriptDir + "config.ini")
 if ( -not $ini["width"] ) { $ini.Add("width", 500) }
 if ( -not $ini["height"] ) { $ini.Add("height", 150) }

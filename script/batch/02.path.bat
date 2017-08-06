@@ -1,7 +1,7 @@
 @echo off
 set BATCHDIR=%~dp0
 
-if "%1"=="" (
+if "%~1"=="" (
 	echo ファイルを指定してください
 	pause
 	exit /b 0

@@ -4,7 +4,7 @@ rem  which相当の動きをするバッチだが、
 rem  windowsではwhereを使えばよい
 rem -------------------------------------------------------
 
-if "%1"=="" (
+if "%~1"=="" (
 	echo usage: which command name
 	exit /b 0
 )

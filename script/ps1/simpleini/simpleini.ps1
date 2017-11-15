@@ -29,8 +29,8 @@ function Save-Ini( $Path, $IniData )
 #load
 $basedir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + "\\"
 $ini = Load-Ini -Path ($basedir + "config.ini")
-if ( -not $ini["width"] ) { $ini.Add("width", 500) }
-if ( -not $ini["height"] ) { $ini.Add("height", 150) }
+if ( -not $ini.ContainsKey("width") ) { $ini.Add("width", 500) }
+if ( -not $ini.ContainsKey("height") ) { $ini.Add("height", 150) }
 
 $ini
 "------------"

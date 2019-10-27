@@ -5,6 +5,7 @@ Set-StrictMode -Version 2.0
 $ScriptDir = (Split-Path -Path $MyInvocation.InvocationName -Parent) + '\'
 . .\DebugTools.ps1
 
+
 Write-Host "--------------------------------------------"
 Write-Host "array"
 Write-Host "--------------------------------------------"
